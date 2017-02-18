@@ -41,6 +41,11 @@ public class EnemyTameable : MonoBehaviour
 
 	#region MonoBehaviour calls
 
+	void Awake()
+	{
+		
+	}
+
 	#endregion
 
 	#region Private methods
@@ -57,6 +62,8 @@ public class EnemyTameable : MonoBehaviour
 
 	private void ModifyEnemyAIElements(Transform positionToFollow)
 	{		
+		_enemyIdentity.EnemyAIController.ChangingPlayerTargetEvent += () => { _enemyIdentity.EnemyAIController.Target = null; };
+		_enemyIdentity.EnemyAIController.Target = null;
 		_enemyIdentity.EnemyAIController.SetTargetInRangeOfAttack (null);
 		_enemyIdentity.EnemyAIController.TransformToFollow = positionToFollow;
 	}

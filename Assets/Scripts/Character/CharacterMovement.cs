@@ -61,6 +61,11 @@ public class CharacterMovement : CharacterComponent {
 		set;
 	}
 
+	public float RelativeSpeed
+	{
+		get { return Movement.magnitude / (_characterIdentity.CharacterStats.MovementSpeed * 2.0f * Time.deltaTime) ; }
+	}
+
 	#endregion
 
 	#region MonoBehaviour calls

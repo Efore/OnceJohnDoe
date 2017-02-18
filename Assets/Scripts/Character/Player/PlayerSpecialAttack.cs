@@ -8,12 +8,16 @@ public class PlayerSpecialAttack : CharacterComponent
 	protected float _currentMetalPoints;
 
 	[Header("General params")]
-	[Range(0.0f,1.0f)]
-	[SerializeField] protected float _specialAttack1requirement = 0.5f;
-	[SerializeField] protected float _metalPointRecoveringFactor = 1.0f;
-	[SerializeField]private float _aoeDistance = 3.0f;
 
+	[Range(0.0f,1.0f)]
+	[SerializeField] 
+	protected float _specialAttack1requirement = 0.5f;
+
+	[Range(0.0f,1.0f)]
+	[SerializeField] 
 	protected float _specialAttack2requirement = 1.0f;
+
+	[SerializeField]private float _aoeDistance = 3.0f;
 
 	#endregion
 
@@ -36,6 +40,10 @@ public class PlayerSpecialAttack : CharacterComponent
 		get { return _currentMetalPoints; }
 		set {
 			_currentMetalPoints = value;
+
+			if (_currentMetalPoints >= _initialMetalPoints)
+				_currentMetalPoints = _initialMetalPoints;
+			
 			if (MetalPointsChangedEvent != null)
 				MetalPointsChangedEvent (_currentMetalPoints / _initialMetalPoints);
 		}
@@ -147,13 +155,6 @@ public class PlayerSpecialAttack : CharacterComponent
 
 	#region Public methods
 
-	public void RecoverMetalPoint(float multiplicator)
-	{
-		CurrentMetalPoints += multiplicator * _metalPointRecoveringFactor;
-		if (CurrentMetalPoints >= _initialMetalPoints)
-			CurrentMetalPoints = _initialMetalPoints;
-	}
-
 	public void RespawnCharacter()
 	{
 		CurrentMetalPoints = _initialMetalPoints;
@@ -168,7 +169,6 @@ public class PlayerSpecialAttack : CharacterComponent
 	{		
 		StartSpecialAttack2Effect();
 	}
-
 
 	public void PushAwayEnemies()
 	{

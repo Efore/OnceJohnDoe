@@ -5,6 +5,8 @@ public class ChopoSpecialAttack : PlayerSpecialAttack
 {
 	#region Private members
 
+	[Header("Chopo params")]
+	[SerializeField] protected float _metalPointRecoveringBase = 1.0f;
 	[Header("Special Attack 1 params")]
 	[SerializeField]private RuntimeAnimatorController _superChopoAnimatorController = null;
 	[SerializeField]private GameObject _electricBallGameObject = null;
@@ -36,6 +38,7 @@ public class ChopoSpecialAttack : PlayerSpecialAttack
 	#endregion
 
 	#region MonoBehaviour calls
+
 	protected override void Awake ()
 	{
 		base.Awake ();
@@ -51,11 +54,10 @@ public class ChopoSpecialAttack : PlayerSpecialAttack
 		_characterIdentity.CharacterAttack.CharacterAttacksCharacterEvent += RecoverMPByAttacking;
 	}
 
-
-
 	#endregion
 
 	#region Private methods
+
 	private IEnumerator SpecialAttack1Coroutine()
 	{
 		float elapsedTime = 0.0f;
@@ -160,6 +162,11 @@ public class ChopoSpecialAttack : PlayerSpecialAttack
 			Constants.Vector2.right;
 		
 		enemy.CharacterHit.GetHit (_characterIdentity, 3, headingDirection, 1000.0f);
+	}
+
+	private void RecoverMetalPoint(float multiplicator)
+	{
+		CurrentMetalPoints += multiplicator * _metalPointRecoveringBase;
 	}
 
 	private void RecoverMPByAttacking (CharacterIdentity victim)

@@ -76,9 +76,7 @@ public class CaniBikerAI : EnemyAI
 		float secs = wait ? SECS_TO_CHARGE_AGAIN : 0.01f;
 		yield return new WaitForSeconds (secs);
 
-		Target.CharacterHit.CharacterDiesEvent -= ChangeTarget;
 		Target = CharacterManager.Singleton.GetRandomPlayer();
-		Target.CharacterHit.CharacterDiesEvent += ChangeTarget;
 
 		_chargingDirection = Constants.Vector2.left;
 

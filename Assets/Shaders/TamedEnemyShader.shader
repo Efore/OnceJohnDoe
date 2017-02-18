@@ -49,7 +49,7 @@
 				float4 vertex   : SV_POSITION;
 				fixed4 color    : COLOR;
 				float2 texcoord  : TEXCOORD0;
-				float4 worldPosition : TEXCOORD1;
+				float4 worldPos : TEXCOORD1;
 			};
 			
 			fixed4 _Color;
@@ -57,8 +57,8 @@
 			v2f vert(appdata_t IN)
 			{
 				v2f OUT;
-				OUT.worldPosition = IN.vertex;
-				OUT.vertex = mul(UNITY_MATRIX_MVP, OUT.worldPosition);
+				OUT.worldPos = IN.vertex;
+				OUT.vertex = mul(UNITY_MATRIX_MVP, OUT.worldPos);
 				OUT.texcoord = IN.texcoord;
 				OUT.color = IN.color * _Color;
 				#ifdef PIXELSNAP_ON
@@ -91,10 +91,7 @@
 			fixed4 frag(v2f IN) : SV_Target
 			{
 				
-				float2 offset = float2(
-					tex2D(_NoiseTex, float2(IN.worldPosition.y / _DistortionSpreader + sin(_Time[1]), 0)).r,
-					tex2D(_NoiseTex, float2(0, IN.worldPosition.x / _DistortionSpreader + sin(_Time[1]))).r
-				);
+				float2 offset = float2( tex2D(_NoiseTex, float2(IN.worldPos.y / _DistortionSpreader + sin(_Time[1]), 0)).g, 0);
 
 				offset -= 0.5;
 

@@ -16,6 +16,15 @@ public class EnemyAI : CharacterComponent
 	protected bool _readyToAttack = false;
 	protected bool _lockMovement = false;
 
+
+
+	#endregion
+
+	#region Public members
+	#endregion
+
+	#region Properties
+
 	public bool ReadyToAttack
 	{
 		get { return _readyToAttack; }
@@ -32,13 +41,14 @@ public class EnemyAI : CharacterComponent
 
 	public CharacterIdentity Target
 	{
-		get { return _target; 	}
-		set {
-			if(_target != null)
-				_target.CharacterHit.CharacterDefeatedEvent -= ChangeTarget;	
+		get { return _target; }
+		set { 
+			if (_target != null)
+				_target.CharacterHit.CharacterDefeatedEvent -= ChangePlayerTarget;				
 			_target = value;
-			if(_target != null)
-				_target.CharacterHit.CharacterDefeatedEvent += ChangeTarget;
+			_targetInRangeOfAttack = null;
+			if (_target != null)
+				_target.CharacterHit.CharacterDefeatedEvent += ChangePlayerTarget;
 		}
 	}
 
@@ -50,17 +60,15 @@ public class EnemyAI : CharacterComponent
 
 	#endregion
 
-	#region Public members
-	#endregion
-
-	#region Properties
-	#endregion
-
 	#region Events
+
+	public delegate void ChangingPlayerTarget ();
+	public event ChangingPlayerTarget ChangingPlayerTargetEvent;
 
 	#endregion
 
 	#region MonoBehaviour calls
+
 	protected override void Awake ()
 	{
 		base.Awake ();
@@ -71,7 +79,7 @@ public class EnemyAI : CharacterComponent
 	{
 		base.Start ();
 		_enemyInput = (EnemyInput)_characterIdentity.CharacterInput;
-		Target = CharacterManager.Singleton.GetRandomPlayer();
+		ChangePlayerTarget ();
 	}
 
 	protected override void Update ()
@@ -125,29 +133,32 @@ public class EnemyAI : CharacterComponent
 		_lockMovement = false;
 	}
 
-	protected void ChangeTarget()
+	protected void ChangePlayerTarget()
 	{		
-		Target = CharacterManager.Singleton.GetRandomPlayer();
+		Target = CharacterManager.Singleton.GetRandomPlayer();	
+
+		if (ChangingPlayerTargetEvent != null)
+			ChangingPlayerTargetEvent ();
 	}
 
 	protected void AlignWithTarget()
 	{		
-		if(Target.TransformRef.position.x - this.TransformRef.position.x > OFFSET_TO_ALIGN)
+		if(_target.TransformRef.position.x - this.TransformRef.position.x > OFFSET_TO_ALIGN)
 			_enemyInput.GoRight = true;
 		else
 			_enemyInput.GoRight = false;
 
-		if(Target.TransformRef.position.x - this.TransformRef.position.x < -OFFSET_TO_ALIGN)
+		if(_target.TransformRef.position.x - this.TransformRef.position.x < -OFFSET_TO_ALIGN)
 			_enemyInput.GoLeft = true;
 		else
 			_enemyInput.GoLeft = false;
 
-		if(Target.TransformRef.position.z - this.TransformRef.position.z > OFFSET_TO_ALIGN)
+		if(_target.TransformRef.position.z - this.TransformRef.position.z > OFFSET_TO_ALIGN)
 			_enemyInput.GoUp = true;
 		else
 			_enemyInput.GoUp = false;
 
-		if(Target.TransformRef.position.z - this.TransformRef.position.z < -OFFSET_TO_ALIGN)
+		if(_target.TransformRef.position.z - this.TransformRef.position.z < -OFFSET_TO_ALIGN)
 			_enemyInput.GoDown = true;
 		else
 			_enemyInput.GoDown = false;
@@ -188,7 +199,8 @@ public class EnemyAI : CharacterComponent
 
 	public virtual void SetTargetInRangeOfAttack(CharacterIdentity targetInRangeOfAttack)
 	{		
-		Target = targetInRangeOfAttack;
+		if(targetInRangeOfAttack != null)
+			Target = targetInRangeOfAttack;
 		_targetInRangeOfAttack = targetInRangeOfAttack;
 	}
 

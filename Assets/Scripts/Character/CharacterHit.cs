@@ -39,6 +39,11 @@ public class CharacterHit : CharacterComponent {
 
 	#region Properties
 
+	public float CurrentHealth
+	{
+		get{ return _currentHealth; }
+	}
+
 	public bool IsBeingHit
 	{
 		get; set;
@@ -135,11 +140,12 @@ public class CharacterHit : CharacterComponent {
 		GameObject original = bigHit ? FxManager.Singleton.fxPrefabHitCharacterText : FxManager.Singleton.fxPrefabHitCharacter;
 		ObjectPoolManager.Singleton.Instantiate(original,_fxHitParticlePosition.position,Constants.Quaternion.identity);
 	}
+
 	#endregion
 
 	#region Public methods
 
-	public void GetHit(CharacterIdentity attacker, int hitNum, Vector2 attackerHeadingDirection, float damage)
+	public void GetHit(CharacterIdentity attacker, int hitNum, Vector2 attackerHeadingDirection, float damage, bool push = true)
 	{
 		if(!CheckIfPossible() || hitNum == 0)
 			return;
@@ -171,10 +177,7 @@ public class CharacterHit : CharacterComponent {
 			{
 				hitNum = 3;
 
-				if (CharacterDiesEvent != null)
-					CharacterDiesEvent ();
-
-				_characterIdentity.CharacterAnimation.SetAnimationBool ("Die", true);
+				KillCharacter ();
 			}
 		}
 
@@ -188,7 +191,7 @@ public class CharacterHit : CharacterComponent {
 			
 			float _destX = 0.0f; 
 
-			float horizontalDistance = Mathf.Clamp(damage * DISTANCE_PER_DAMAGE_POINT,MIN_FALLING_DISTANCE,MAX_FALLING_DISTANCE);
+			float horizontalDistance = push ? Mathf.Clamp(damage * DISTANCE_PER_DAMAGE_POINT,MIN_FALLING_DISTANCE,MAX_FALLING_DISTANCE) : MIN_FALLING_DISTANCE;
 
 			if(front)
 				_destX = _characterIdentity.CharacterMovement.HeadingDirection == Constants.Vector2.left ? TransformRef.position.x + 1 * horizontalDistance 
@@ -227,5 +230,14 @@ public class CharacterHit : CharacterComponent {
 		_characterIdentity.CharacterAnimation.SetAnimationBool("Die",false);
 		HealthChangeEvent (1.0f);
 	}
+
+	public void KillCharacter()
+	{
+		if (CharacterDiesEvent != null)
+			CharacterDiesEvent ();
+
+		_characterIdentity.CharacterAnimation.SetAnimationBool ("Die", true);	
+	}
+
 	#endregion
 }
