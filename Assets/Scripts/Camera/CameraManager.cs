@@ -31,8 +31,7 @@ public class CameraManager : EnhancedMonoBehaviour
 	[SerializeField] private GameObject [] _bgsBack;
 	[SerializeField] private GameObject [] _bgsMiddle;
 
-	[Header("Camera Effects")]
-	[SerializeField] private CameraFadeInEffect _cameraFadeInEffect = null;
+	private CameraSpecialEffect _cameraSpecialEffect = null;
 
 	#endregion
 
@@ -55,6 +54,7 @@ public class CameraManager : EnhancedMonoBehaviour
 	{
 		base.Awake ();
 		_instance = this;
+		_cameraSpecialEffect = GetComponent<CameraSpecialEffect> ();
 		_cameraBorders = GetComponentsInChildren<CameraBorder>();
 
 	}
@@ -154,10 +154,14 @@ public class CameraManager : EnhancedMonoBehaviour
 		_rightLimit = StageManager.Singleton.RightLimit.position.x - _cameraWidth/2 + 2;
 	}
 
-	public void FadeScreen(bool fadeIn, float fadeTime = 0.3f, bool muteSound = false)
+	public void SpecialEffectFadeScreen(bool fadeIn, float fadeTime = 0.3f, bool muteSound = true)
 	{
-		_cameraFadeInEffect.enabled = true;
-		_cameraFadeInEffect.FadeScreen (fadeIn, fadeTime, muteSound);
+		_cameraSpecialEffect.SpecialEffectFadeScreen (fadeIn, fadeTime, muteSound);
+	}
+
+	public void SpecialEffectWaveScreen()
+	{
+		_cameraSpecialEffect.SpecialEffectWave ();
 	}
 
 	#endregion

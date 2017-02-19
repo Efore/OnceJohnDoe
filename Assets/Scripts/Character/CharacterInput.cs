@@ -20,7 +20,7 @@ public class CharacterInput : CharacterComponent {
 			KeyUpPressed = false;
 			KeyDownPressed = false;
 			KeyLeftPressed = false;
-			KeyLeftReleased = false;
+			KeyLeftReleased = true;
 			KeyRightPressed = false;
 			KeyRightReleased = false;
 			KeyAttackPressed = false;

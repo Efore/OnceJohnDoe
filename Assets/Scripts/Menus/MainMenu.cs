@@ -55,9 +55,8 @@ public class MainMenu : MonoBehaviour
 
 	private IEnumerator GoToCharSelectionMenu()
 	{		
-		CameraFadeInEffect fadeInEffect = Camera.main.GetComponent<CameraFadeInEffect> ();
-		fadeInEffect.enabled = true;
-		fadeInEffect.FadeScreen (true);
+		CameraSpecialEffect fadeInEffect = Camera.main.GetComponent<CameraSpecialEffect> ();
+		fadeInEffect.SpecialEffectFadeScreen (true);
 		yield return new WaitForSeconds (1.0f);
 		GameManager.Singleton.ChangeScene (1);
 	}

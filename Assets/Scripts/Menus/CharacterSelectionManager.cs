@@ -49,9 +49,8 @@ public class CharacterSelectionManager : MonoBehaviour
 
 	void Start()
 	{
-		CameraFadeInEffect fadeInEffect = Camera.main.GetComponent<CameraFadeInEffect> ();
-		fadeInEffect.enabled = true;
-		fadeInEffect.FadeScreen (false);
+		CameraSpecialEffect fadeInEffect = Camera.main.GetComponent<CameraSpecialEffect> ();
+		fadeInEffect.SpecialEffectFadeScreen (false);
 	}
 
 	void Update()
@@ -74,9 +73,8 @@ public class CharacterSelectionManager : MonoBehaviour
 	private IEnumerator StartGameCoroutine()
 	{
 		GameManager.Singleton.player1CharacterPrefab = _currentSelectedCharacter.inGamePrefab;
-		CameraFadeInEffect fadeInEffect = Camera.main.GetComponent<CameraFadeInEffect> ();
-		fadeInEffect.enabled = true;
-		fadeInEffect.FadeScreen (true);
+		CameraSpecialEffect fadeInEffect = Camera.main.GetComponent<CameraSpecialEffect> ();
+		fadeInEffect.SpecialEffectFadeScreen (true);
 		yield return new WaitForSeconds (1.0f);
 		GameManager.Singleton.ChangeScene (2);
 	}

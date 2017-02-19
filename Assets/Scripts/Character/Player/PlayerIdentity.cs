@@ -52,7 +52,7 @@ public class  PlayerIdentity : CharacterIdentity
 		if (CharacterManager.Singleton != null)
 			CharacterManager.Singleton.LockPlayersInput (true);
 		yield return new WaitForSeconds(2.0f);
-		CameraManager.Singleton.FadeScreen(false);
+		CameraManager.Singleton.SpecialEffectFadeScreen(false);
 	}
 	#endregion
 

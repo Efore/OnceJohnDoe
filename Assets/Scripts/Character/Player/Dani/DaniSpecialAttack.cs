@@ -100,7 +100,6 @@ public class DaniSpecialAttack : PlayerSpecialAttack
 
 	protected override void StartSpecialAttack2Effect ()
 	{
-		CommandTamedEnemies ();
 		SpecialAttack2Ends ();
 	}
 
@@ -117,6 +116,10 @@ public class DaniSpecialAttack : PlayerSpecialAttack
 		foreach (EnemyIdentity enemy in CharacterManager.Singleton.Enemies)
 		{
 			EnemyTameable enemyTameable = enemy.GetComponent<EnemyTameable> ();
+			enemy.CharacterInput.LockInput = false;
+
+			if (bodyGuardPositionIndex == _tamedEnemyPositions.Length)
+				continue;
 
 			if (enemyTameable != null)
 			{
@@ -125,9 +128,6 @@ public class DaniSpecialAttack : PlayerSpecialAttack
 				enemyTameable.TameEnemy (_tamedEnemyPositions [bodyGuardPositionIndex],_characterIdentity.CharacterStats);
 				bodyGuardPositionIndex++;
 			}
-
-			if (bodyGuardPositionIndex == _tamedEnemyPositions.Length)
-				break;
 		}
 
 		for (int i = 0; i < _tamedEnemies.Count; ++i)
@@ -137,6 +137,9 @@ public class DaniSpecialAttack : PlayerSpecialAttack
 
 	private void CommandTamedEnemies()
 	{
+		if (CharacterManager.Singleton.Enemies.Count == 0)
+			return;
+		
 		for (int i = 0; i < _tamedEnemies.Count; ++i)
 			_tamedEnemies [i].AttackTarget (CharacterManager.Singleton.GetRandomEnemy ());
 	}
@@ -144,7 +147,12 @@ public class DaniSpecialAttack : PlayerSpecialAttack
 	private void KillTamedEnemies()
 	{
 		foreach (EnemyTameable enemy in _tamedEnemies)
-			enemy.EnemyIdentity.CharacterHit.KillCharacter ();
+		{
+			Vector2 headingDirection = enemy.EnemyIdentity.TransformRef.position.x < TransformRef.position.x ? Constants.Vector2.left :
+				Constants.Vector2.right;
+
+			enemy.EnemyIdentity.CharacterHit.GetHit (_characterIdentity, 3, headingDirection, 1000.0f, false);
+		}
 	}
 
 	private float CalculateMetalPointRecovery()
@@ -157,6 +165,15 @@ public class DaniSpecialAttack : PlayerSpecialAttack
 	#endregion
 
 	#region Public methods
+
+	public void CreateWaves()
+	{
+		CameraManager.Singleton.SpecialEffectWaveScreen ();
+		foreach (EnemyIdentity enemy in CharacterManager.Singleton.Enemies)
+		{
+			enemy.CharacterInput.LockInput = true;
+		}
+	}
 
 	#endregion
 

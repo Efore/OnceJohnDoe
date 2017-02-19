@@ -53,6 +53,10 @@ public class EnemyInput : CharacterInput
 	#region Monobehavior calls
 	// Update is called once per frame
 	protected override void Update () {
+		
+		if(LockInput)
+			return;
+		
 		KeyUpPressed = GoUp;
 		KeyDownPressed = GoDown;
 		KeyLeftPressed = GoLeft;

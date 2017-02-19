@@ -1,11 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CameraFadeInEffect : MonoBehaviour
+public class CameraSpecialEffect : MonoBehaviour
 {
 	#region Private members
+	private const float MAX_WAVE_INCR = Mathf.PI / 2.0f;
 
 	[SerializeField]private Material _fadeInMaterial = null;
+	[SerializeField]private Material _wavedMaterial = null;
+
+	private Material _inUseMaterial = null;
 
 	#endregion
 
@@ -23,9 +27,14 @@ public class CameraFadeInEffect : MonoBehaviour
 
 	#region MonoBehaviour calls
 
-	void OnRenderImage(RenderTexture srcTexture, RenderTexture destTexture)
+	void Awake()
 	{
-		Graphics.Blit (srcTexture, destTexture, _fadeInMaterial);
+		_inUseMaterial = _fadeInMaterial;
+	}
+
+	void OnRenderImage(RenderTexture srcTexture, RenderTexture destTexture)
+	{		
+		Graphics.Blit (srcTexture, destTexture, _inUseMaterial);
 	}
 
 	#endregion
@@ -43,7 +52,8 @@ public class CameraFadeInEffect : MonoBehaviour
 			if(CharacterManager.Singleton != null)
 				CharacterManager.Singleton.LockPlayersInput (true);
 			do
-			{
+			{				
+				AudioListener.volume += alphaIncr;
 				alpha += alphaIncr;
 				_fadeInMaterial.SetFloat("_Alpha",alpha);
 				yield return waitForSeconds;
@@ -53,6 +63,8 @@ public class CameraFadeInEffect : MonoBehaviour
 		{
 			do
 			{
+				if(muteSound)					
+					AudioListener.volume -= alphaIncr;
 				alpha -= alphaIncr;
 				_fadeInMaterial.SetFloat("_Alpha",alpha);				
 				yield return waitForSeconds;
@@ -63,15 +75,40 @@ public class CameraFadeInEffect : MonoBehaviour
 		}
 	}
 
+	private IEnumerator WaveCoroutine()
+	{
+		float waveIncrease = 0.01f;
+		WaitForSeconds waitForSeconds = new WaitForSeconds (waveIncrease);
+		float waveIndex = 0.0f;
+		do
+		{	
+			_wavedMaterial.SetFloat("_WaveIndex",waveIndex);
+			waveIndex += waveIncrease;
+			yield return waitForSeconds;
+		} while(waveIndex < MAX_WAVE_INCR);
+
+		this.enabled = false;
+		_wavedMaterial.SetFloat("_WaveIndex",0.0f);
+	}
+
 	#endregion
 
 	#region Public methods
 
-	public void FadeScreen(bool fadeIn, float fadeTime = 0.3f, bool muteSound = false)
-	{
+	public void SpecialEffectFadeScreen(bool fadeIn, float fadeTime = 0.3f, bool muteSound = true)
+	{		
+		_inUseMaterial = _fadeInMaterial;
+		this.enabled = true;
 		StartCoroutine (FadeCoroutine(fadeIn, fadeTime, muteSound));
 	}
 
+	public void SpecialEffectWave()
+	{
+		_inUseMaterial = _wavedMaterial;
+		this.enabled = true;
+		StartCoroutine (WaveCoroutine ());
+	}
+	 
 	#endregion
 
 }
