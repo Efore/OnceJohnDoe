@@ -88,6 +88,10 @@ public class DaniSpecialAttack : PlayerSpecialAttack
 		_characterIdentity.CharacterInput.LockInput = false;
 		_characterIdentity.CharacterHit.IsInvulnerable = false;
 		_characterIdentity.CharacterAnimation.SetAnimationBool("SpecialAttack1",false);
+		foreach (EnemyIdentity enemy in CharacterManager.Singleton.Enemies)
+			enemy.CharacterInput.LockInput = false;
+		foreach (EnemyTameable enemyTameable in _tamedEnemies)
+			enemyTameable.EnemyIdentity.CharacterInput.LockInput = false;
 	}
 
 	protected override void PerformSpecialAttack2 ()
@@ -116,7 +120,6 @@ public class DaniSpecialAttack : PlayerSpecialAttack
 		foreach (EnemyIdentity enemy in CharacterManager.Singleton.Enemies)
 		{
 			EnemyTameable enemyTameable = enemy.GetComponent<EnemyTameable> ();
-			enemy.CharacterInput.LockInput = false;
 
 			if (bodyGuardPositionIndex == _tamedEnemyPositions.Length)
 				continue;
@@ -125,6 +128,7 @@ public class DaniSpecialAttack : PlayerSpecialAttack
 			{
 				_tamedEnemies.Add(enemyTameable);
 				enemyTameable.EnemyIdentity.CharacterHit.CharacterDefeatedEvent += () => { _tamedEnemies.Remove(enemyTameable); };
+
 				enemyTameable.TameEnemy (_tamedEnemyPositions [bodyGuardPositionIndex],_characterIdentity.CharacterStats);
 				bodyGuardPositionIndex++;
 			}

@@ -72,7 +72,7 @@ public class SpawnEnemiesTrigger : EnhancedMonoBehaviour
 			enemy.GetComponent<CharacterHit>().CharacterDiesEvent += EnemyKilled;
 
 			if (enemy.GetComponent<EnemyTameable> () != null)
-				enemy.GetComponent<EnemyTameable> ().EnemyTamedEvent += EnemyKilled;
+				enemy.GetComponent<EnemyTameable> ().EnemyTamedEvent += EnemyTamed;
 			
 			yield return new WaitForSeconds(0.1f);
 		}
@@ -85,6 +85,12 @@ public class SpawnEnemiesTrigger : EnhancedMonoBehaviour
 			FillPotentialEnemiesToSpawnList(wave);
 			FillEnemyBag(wave);
 		}
+	}
+
+	private void EnemyTamed(EnemyIdentity enemy)
+	{
+		enemy.GetComponent<CharacterHit> ().CharacterDiesEvent -= EnemyKilled;
+		EnemyKilled ();
 	}
 
 	private void EnemyKilled ()

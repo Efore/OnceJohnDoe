@@ -34,7 +34,7 @@ public class EnemyTameable : MonoBehaviour
 
 	#region Events
 
-	public delegate void EnemyTamed ();
+	public delegate void EnemyTamed (EnemyIdentity  enemy);
 	public event EnemyTamed EnemyTamedEvent;
 
 	#endregion
@@ -85,7 +85,7 @@ public class EnemyTameable : MonoBehaviour
 		_enemyIdentity.SpriteRenderer.sharedMaterial = _tamedEnemyMaterialReference;
 
 		if (EnemyTamedEvent != null)
-			EnemyTamedEvent ();
+			EnemyTamedEvent (_enemyIdentity);
 	}
 
 	public void AttackTarget(EnemyIdentity target)
