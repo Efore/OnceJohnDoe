@@ -56,6 +56,12 @@ public class KnifeCaniAI : CaniAI
 			base.Update ();
 		else
 		{
+			if (_enemyInput.LockInput)
+			{
+				IsCharging = false;
+				return;
+			}
+
 			_enemyInput.GoUp = false;
 			_enemyInput.GoDown = false;
 			if (ChargingDirection ==Constants.Vector2.right)

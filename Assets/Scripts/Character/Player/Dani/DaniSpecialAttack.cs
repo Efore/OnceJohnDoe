@@ -18,6 +18,8 @@ public class DaniSpecialAttack : PlayerSpecialAttack
 
 	private List<EnemyTameable> _tamedEnemies = new List<EnemyTameable> ();
 
+	private Coroutine _killTamedEnemiesCoroutine = null;
+
 	#endregion
 
 	#region Public members
@@ -62,7 +64,7 @@ public class DaniSpecialAttack : PlayerSpecialAttack
 		} while(true);
 	}
 
-	protected IEnumerator SpecialAttack1Coroutine()
+	protected IEnumerator KillTamedEnemiesCoroutine()
 	{
 		yield return new WaitForSeconds (_tamingDuration);
 		KillTamedEnemies ();
@@ -79,7 +81,6 @@ public class DaniSpecialAttack : PlayerSpecialAttack
 	protected override void StartSpecialAttack1Effect ()
 	{
 		TameEnemies ();
-		StartCoroutine (SpecialAttack1Coroutine ());
 		SpecialAttack1Ends();
 	}
 
@@ -127,7 +128,12 @@ public class DaniSpecialAttack : PlayerSpecialAttack
 			if (enemyTameable != null)
 			{
 				_tamedEnemies.Add(enemyTameable);
-				enemyTameable.EnemyIdentity.CharacterHit.CharacterDefeatedEvent += () => { _tamedEnemies.Remove(enemyTameable); };
+				enemyTameable.EnemyIdentity.CharacterHit.CharacterDefeatedEvent += 
+					() => { 
+						_tamedEnemies.Remove (enemyTameable);
+						if (_tamedEnemies.Count == 0)
+							StopCoroutine (_killTamedEnemiesCoroutine);
+					};
 
 				enemyTameable.TameEnemy (_tamedEnemyPositions [bodyGuardPositionIndex],_characterIdentity.CharacterStats);
 				bodyGuardPositionIndex++;
@@ -137,15 +143,27 @@ public class DaniSpecialAttack : PlayerSpecialAttack
 		for (int i = 0; i < _tamedEnemies.Count; ++i)
 			CharacterManager.Singleton.Enemies.Remove (_tamedEnemies [i].EnemyIdentity);
 
+		_killTamedEnemiesCoroutine = StartCoroutine (KillTamedEnemiesCoroutine ());
 	}
 
 	private void CommandTamedEnemies()
 	{
 		if (CharacterManager.Singleton.Enemies.Count == 0)
 			return;
-		
-		for (int i = 0; i < _tamedEnemies.Count; ++i)
-			_tamedEnemies [i].AttackTarget (CharacterManager.Singleton.GetRandomEnemy ());
+
+		List<EnemyIdentity> _enemiesInFront = new List<EnemyIdentity> ();
+
+		for (int i = 0; i < CharacterManager.Singleton.Enemies.Count; ++i)
+		{
+			if (CharacterManager.Singleton.Enemies [i].TransformRef.position.x * _characterIdentity.CharacterMovement.HeadingDirection.x >= 0)
+				_enemiesInFront.Add (CharacterManager.Singleton.Enemies [i]);
+		}
+
+		if (_enemiesInFront.Count > 0)
+		{
+			for (int i = 0; i < _tamedEnemies.Count; ++i)
+				_tamedEnemies [i].AttackTarget (_enemiesInFront [Random.Range (0, _enemiesInFront.Count)]);			
+		}
 	}
 
 	private void KillTamedEnemies()

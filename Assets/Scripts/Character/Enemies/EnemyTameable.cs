@@ -12,6 +12,9 @@ public class EnemyTameable : MonoBehaviour
 	private GameObject[] _enemyAttackColliderContainers = null;
 
 	[SerializeField]
+	private GameObject[] _gameObjectsToDeactivate = null;
+
+	[SerializeField]
 	private GameObject _enemyHitColliderContainer = null;
 
 	[SerializeField]
@@ -74,6 +77,12 @@ public class EnemyTameable : MonoBehaviour
 		_enemyIdentity.CharacterStats.AttackDamage = tamerStats.AttackDamage;
 	}
 
+	private void DeactivateUnusedElements()
+	{
+		for (int i = 0; i < _gameObjectsToDeactivate.Length; ++i)
+			_gameObjectsToDeactivate [i].SetActive (false);
+	}
+
 	#endregion
 
 	#region Public methods
@@ -81,6 +90,7 @@ public class EnemyTameable : MonoBehaviour
 	public void TameEnemy(Transform positionToFollow, CharacterStats tamerStats)
 	{
 		SwitchCollidersLayers ();
+
 		ModifyEnemyAIElements (positionToFollow);
 		_enemyIdentity.SpriteRenderer.sharedMaterial = _tamedEnemyMaterialReference;
 
