@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class EnemyTameable : MonoBehaviour
+public class EnemyTameable : EnhancedMonoBehaviour
 {
 	#region Private members
 
@@ -20,6 +20,9 @@ public class EnemyTameable : MonoBehaviour
 	[SerializeField]
 	private Material _tamedEnemyMaterialReference = null;
 
+	[SerializeField]
+	private UnityEngine.UI.Image _tamingCountDown = null;
+
 	#endregion
 
 	#region Public members
@@ -27,6 +30,11 @@ public class EnemyTameable : MonoBehaviour
 	public EnemyIdentity EnemyIdentity
 	{
 		get { return _enemyIdentity; }
+	}
+
+	public UnityEngine.UI.Image TamingCountDown
+	{
+		get { return _tamingCountDown; }
 	}
 
 	#endregion
@@ -43,11 +51,6 @@ public class EnemyTameable : MonoBehaviour
 	#endregion
 
 	#region MonoBehaviour calls
-
-	void Awake()
-	{
-		
-	}
 
 	#endregion
 

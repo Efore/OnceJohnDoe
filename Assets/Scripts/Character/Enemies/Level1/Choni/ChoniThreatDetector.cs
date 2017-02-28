@@ -41,7 +41,7 @@ public class ChoniThreatDetector : EnhancedMonoBehaviour
 		if(other.gameObject.transform.parent == this.transform.parent)
 			return;
 		
-		if (other.gameObject.tag == Tags.PLAYER && !_potentialThreats.Contains (other))
+		if (other.transform.root.tag == Tags.PLAYER && !_potentialThreats.Contains (other))
 		{
 			_potentialThreats.Add (other);
 			other.gameObject.GetComponent<ColliderDisabledAnnouncer> ().ColliderDisabledEvent += OnTriggerExit;
@@ -59,7 +59,7 @@ public class ChoniThreatDetector : EnhancedMonoBehaviour
 		if(other.gameObject.transform.parent == this.transform.parent)
 			return;
 		
-		if (other.gameObject.tag == Tags.PLAYER && _potentialThreats.Contains (other))
+		if (other.transform.root.tag == Tags.PLAYER && _potentialThreats.Contains (other))
 		{
 			_potentialThreats.Remove (other);
 			other.gameObject.GetComponent<ColliderDisabledAnnouncer> ().ColliderDisabledEvent -= OnTriggerExit;

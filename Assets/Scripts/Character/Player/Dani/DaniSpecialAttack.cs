@@ -18,7 +18,7 @@ public class DaniSpecialAttack : PlayerSpecialAttack
 
 	private List<EnemyTameable> _tamedEnemies = new List<EnemyTameable> ();
 
-	private Coroutine _killTamedEnemiesCoroutine = null;
+	private float _currentTamingDuration = 0.0f;
 
 	#endregion
 
@@ -45,6 +45,30 @@ public class DaniSpecialAttack : PlayerSpecialAttack
 	{
 		base.Start ();
 		StartCoroutine (MetalRecoveryCoroutine ());
+		_currentTamingDuration = _tamingDuration;
+	}
+
+	protected override void Update ()
+	{
+		base.Update ();
+		if (_currentTamingDuration < _tamingDuration)
+		{
+			_currentTamingDuration -= Time.deltaTime;
+
+			if (_currentTamingDuration < 10.0f)
+				for (int i = 0; i < _tamedEnemies.Count; ++i)
+				{
+					_tamedEnemies [i].TamingCountDown.gameObject.SetActive (true);
+					_tamedEnemies [i].TamingCountDown.fillAmount = _currentTamingDuration / 10.0f;
+				}
+
+			if (_currentTamingDuration <= 0.0f)
+			{
+				_currentTamingDuration = _tamingDuration;
+				KillTamedEnemies ();
+			}
+		}
+
 	}
 
 	#endregion
@@ -62,12 +86,6 @@ public class DaniSpecialAttack : PlayerSpecialAttack
 			}
 			yield return waitForSeconds;
 		} while(true);
-	}
-
-	protected IEnumerator KillTamedEnemiesCoroutine()
-	{
-		yield return new WaitForSeconds (_tamingDuration);
-		KillTamedEnemies ();
 	}
 
 	protected override void PerformSpecialAttack1 ()
@@ -132,7 +150,7 @@ public class DaniSpecialAttack : PlayerSpecialAttack
 					() => { 
 						_tamedEnemies.Remove (enemyTameable);
 						if (_tamedEnemies.Count == 0)
-							StopCoroutine (_killTamedEnemiesCoroutine);
+							_currentTamingDuration = _tamingDuration;
 					};
 
 				enemyTameable.TameEnemy (_tamedEnemyPositions [bodyGuardPositionIndex],_characterIdentity.CharacterStats);
@@ -143,7 +161,7 @@ public class DaniSpecialAttack : PlayerSpecialAttack
 		for (int i = 0; i < _tamedEnemies.Count; ++i)
 			CharacterManager.Singleton.Enemies.Remove (_tamedEnemies [i].EnemyIdentity);
 
-		_killTamedEnemiesCoroutine = StartCoroutine (KillTamedEnemiesCoroutine ());
+		_currentTamingDuration -= 0.01f;
 	}
 
 	private void CommandTamedEnemies()
