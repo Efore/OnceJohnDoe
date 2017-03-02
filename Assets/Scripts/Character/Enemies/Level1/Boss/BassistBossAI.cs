@@ -63,9 +63,6 @@ public class BassistBossAI : BossAI
 
 	private Coroutine _behaviourCoroutine = null;
 
-	private string _animationStandUpToCheck = "StandUpFront";
-	private string _animationEndRollingToCheck = "EndRolling";
-
 	private List<Transform> _rightSpeakersOrigins = new List<Transform> ();
 	private List<Transform> _leftSpeakersOrigins = new List<Transform>();
 
@@ -88,11 +85,6 @@ public class BassistBossAI : BossAI
 	protected override void Awake ()
 	{
 		base.Awake ();
-
-		_characterIdentity.CharacterAnimation.AnimationEndsEvents.
-			AddListener(_animationStandUpToCheck, new UnityEngine.Events.UnityAction(AnimationStandUpEndsCallback));
-		_characterIdentity.CharacterAnimation.AnimationEndsEvents.
-			AddListener(_animationEndRollingToCheck,new UnityEngine.Events.UnityAction(AnimationEndRollingEndsCallback));
 
 		_characterIdentity.CharacterHit.HealthChangeEvent += ChangeMaxTimeBetweenSpecials;
 		DialogManager.Singleton.CurrentDialogEndedEvent += DialogEndedCallback;
@@ -228,7 +220,7 @@ public class BassistBossAI : BossAI
 		}
 	}
 
-	protected void AnimationStandUpEndsCallback()
+	protected void AnimationStandUpEndsCallbackAI()
 	{
 		_originsToUse.Clear ();
 		StopCoroutine (_behaviourCoroutine);

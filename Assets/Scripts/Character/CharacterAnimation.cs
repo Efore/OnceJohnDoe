@@ -9,29 +9,10 @@ public class CharacterAnimation : CharacterComponent {
 	#region Private members
 
 	private Animator _animator;
-	private string _currentAnimationName = "Idle";
-	private AnimationEventDictionary _animationStartingEvents = new AnimationEventDictionary();
-	private AnimationEventDictionary _animationEndingEvents = new AnimationEventDictionary();
-	private bool _animationStartingTriggered = false;
-	private bool _animationEndingTriggered = false;
-
-	private string[] _animationNamesToCheck = new string[]{"Idle","Walk","Run","Attack1","Attack2",
-		"Attack3","RunAttack","Hit1Front","Hit2Front","Hit3Front", 
-		"Hit1Back","Hit2Back","Hit3Back", "StandUpBack", "StandUpFront","EndRolling"};
 
 	#endregion
 
 	#region Properties
-
-	public AnimationEventDictionary AnimationStartEvents
-	{
-		get { return _animationStartingEvents; }
-	}
-
-	public AnimationEventDictionary AnimationEndsEvents
-	{
-		get { return _animationEndingEvents; }
-	}
 
 	#endregion
 
@@ -46,36 +27,6 @@ public class CharacterAnimation : CharacterComponent {
 	protected override void Update ()
 	{
 		base.Update ();
-
-		if(!CurrentAnimationIs(_currentAnimationName))
-		{
-			_animationEndingTriggered = false;
-			_animationStartingTriggered = false;
-			_currentAnimationName = "";
-		}
-
-		for(int i = 0; i < _animationNamesToCheck.Length; ++i)
-		{
-			if(CurrentAnimationIs(_animationNamesToCheck[i]))
-			{
-				if(_currentAnimationName != _animationNamesToCheck[i])
-				{
-					_currentAnimationName = _animationNamesToCheck[i];
-				}	
-				break;
-			}
-		}
-
-		if(CurrentAnimationProgress() < 0.15 && !_animationStartingTriggered)
-		{
-			_animationStartingEvents.TriggerAnimationEvent(_currentAnimationName);
-			_animationStartingTriggered = true;
-		}
-		else if(CurrentAnimationProgress() > 0.85 && !_animationEndingTriggered)
-		{
-			_animationEndingEvents.TriggerAnimationEvent(_currentAnimationName);	
-			_animationEndingTriggered = true;
-		}
 	}
 	#endregion
 
@@ -85,11 +36,6 @@ public class CharacterAnimation : CharacterComponent {
 	{
 		base.RestartComponent ();
 		_animator.Rebind ();
-		_currentAnimationName = "Idle";
-		_animationStartingEvents = new AnimationEventDictionary();
-		_animationEndingEvents = new AnimationEventDictionary();
-		_animationStartingTriggered = false;
-		_animationEndingTriggered = false;
 	}
 
 	#endregion

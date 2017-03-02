@@ -16,8 +16,6 @@ public class CharacterHit : CharacterComponent {
 	private const float DISTANCE_TO_CHECK_IF_FALLING_DEST = 0.05f;
 	private const float LERPING_PARAM = 0.1f;
 
-	private string[] _animationHitNamesToCheck = new string[]{"Hit1Front","Hit2Front","Hit1Back","Hit2Back"};
-	private string[] _animationStandUpToCheck = new string[]{"StandUpFront","StandUpBack"};
 	private float _initialHealth;
 	private float _currentHealth;
 
@@ -63,19 +61,6 @@ public class CharacterHit : CharacterComponent {
 	#endregion
 
 	#region MonoBehaviour calls
-
-	protected override void Awake ()
-	{
-		base.Awake ();	
-
-		for(int i = 0; i < _animationHitNamesToCheck.Length; ++i)
-			_characterIdentity.CharacterAnimation.AnimationEndsEvents.AddListener(_animationHitNamesToCheck[i],
-				new UnityEngine.Events.UnityAction(AnimationHitEndsCallback));
-
-		for(int i = 0; i < _animationStandUpToCheck.Length; ++i)
-			_characterIdentity.CharacterAnimation.AnimationEndsEvents.AddListener(_animationStandUpToCheck[i],
-				new UnityEngine.Events.UnityAction(AnimationStandUpEndsCallback));
-	}
 
 	protected override void OnEnable ()
 	{

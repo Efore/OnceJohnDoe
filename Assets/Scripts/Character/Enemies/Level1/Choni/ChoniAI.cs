@@ -36,7 +36,6 @@ public class ChoniAI : EnemyAI
 	protected override void Awake ()
 	{
 		base.Awake ();
-		_characterIdentity.CharacterAnimation.AnimationEndsEvents.AddListener("Attack1",new UnityAction(AnimationAttackEndsCallback));
 		_handBag = new GameObject (this.name + "Handbag");
 	}
 
@@ -57,7 +56,7 @@ public class ChoniAI : EnemyAI
 
 	#region Private methods
 
-	private void AnimationAttackEndsCallback()	
+	private void AnimationPreparingAttackEndsCallback()	
 	{
 		if(ReadyToAttack)
 		{

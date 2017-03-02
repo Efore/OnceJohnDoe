@@ -15,7 +15,6 @@ public class CharacterAttack : CharacterComponent {
 	private bool _pendingAttack = false;
 	private int _attackCounter = 0;
 	private Vector3 _posAfterAttackRunning = Vector3.zero;
-	private string[] _animationNamesToCheck = new string[]{"Attack1","Attack2","Attack3","RunAttack"};
 
 	#endregion
 
@@ -56,11 +55,6 @@ public class CharacterAttack : CharacterComponent {
 	{
 		base.Awake ();
 		NumMaxAttacks = _characterIdentity.CharacterStats.MaxAttacks;	
-
-		for(int i = 0; i < _animationNamesToCheck.Length; ++i)
-		{
-			_characterIdentity.CharacterAnimation.AnimationEndsEvents.AddListener(_animationNamesToCheck[i],new UnityAction(AnimationAttackEndsCallback));
-		}
 	}
 
 	// Use this for initialization
