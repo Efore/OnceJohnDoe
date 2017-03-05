@@ -5,6 +5,7 @@ public class CharacterMovement : CharacterComponent {
 
 	#region Private members 
 	private bool _isRunning = false;
+	private bool _hasToWait = false;
 	private Vector2 _headingDirection = Constants.Vector2.right;
 	#endregion
 
@@ -66,6 +67,20 @@ public class CharacterMovement : CharacterComponent {
 		get { return Movement.magnitude / (_characterIdentity.CharacterStats.MovementSpeed * 2.0f * Time.deltaTime) ; }
 	}
 
+	public bool HasToWait
+	{
+		get { return _hasToWait; }
+		set {
+			_hasToWait = value;
+			if (_hasToWait)
+			{
+				IsRunning = false;	
+				Movement = Constants.Vector2.zero;
+				_characterIdentity.CharacterAnimation.SetAnimationFloat("Speed",Movement.magnitude);
+			}
+		}
+	}
+
 	#endregion
 
 	#region MonoBehaviour calls
@@ -120,7 +135,7 @@ public class CharacterMovement : CharacterComponent {
 
 	protected override bool CheckIfPossible ()
 	{
-		return (!_characterIdentity.CharacterAttack.IsAttacking && !_characterIdentity.CharacterHit.IsBeingHit);
+		return (!_characterIdentity.CharacterAttack.IsAttacking && !_characterIdentity.CharacterHit.IsBeingHit && !HasToWait);
 	}
 
 	private void SetMovement()
@@ -162,14 +177,5 @@ public class CharacterMovement : CharacterComponent {
 
 	#region Public methods
 
-	public bool IsSomeDirectionBlocked()
-	{
-		return (TopBlocked || BottomBlocked || RightBlocked || LeftBlocked);
-	}
-
-	public void BlockMovement(bool blocked)
-	{
-		TopBlocked = BottomBlocked = LeftBlocked = RightBlocked = blocked;
-	}
 	#endregion
 }

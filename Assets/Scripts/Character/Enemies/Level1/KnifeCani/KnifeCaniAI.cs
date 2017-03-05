@@ -20,6 +20,8 @@ public class KnifeCaniAI : CaniAI
 		get { return _isCharging; }
 		set {
 			_isCharging = value;
+			if(_isCharging)
+				_characterIdentity.CharacterMovement.HasToWait = false;
 			_characterIdentity.CharacterMovement.IsRunning = value;
 			_chargingAttackCollider.SetActive (value);
 		}

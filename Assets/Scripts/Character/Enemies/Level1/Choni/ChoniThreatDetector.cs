@@ -27,6 +27,8 @@ public class ChoniThreatDetector : EnhancedMonoBehaviour
 		set
 		{
 			_isInDanger = value;
+			if (_isInDanger)
+				_enemyIdentity.CharacterMovement.HasToWait = false;
 			_enemyIdentity.CharacterMovement.IsRunning = IsInDanger;
 		}
 	}
