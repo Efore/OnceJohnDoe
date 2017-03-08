@@ -5,6 +5,7 @@ Library/
 Temp/
 obj/
 Assets/JMO Assets/
+Assets/Sound
 WebGL/
 *.csproj
 *.pidb
