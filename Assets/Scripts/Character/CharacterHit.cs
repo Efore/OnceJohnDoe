@@ -9,6 +9,8 @@ public class CharacterHit : CharacterComponent {
 	[SerializeField]
 	private Transform _fxHitParticlePosition = null;
 
+	private AudioSource _audioSource = null;
+
 	private const float MIN_FALLING_DISTANCE = 1.0f;
 	private const float MAX_FALLING_DISTANCE = 5.0f;
 	private const float DISTANCE_PER_DAMAGE_POINT = 0.15f;
@@ -62,6 +64,12 @@ public class CharacterHit : CharacterComponent {
 
 	#region MonoBehaviour calls
 
+	protected override void Awake ()
+	{
+		base.Awake ();
+		_audioSource = GetComponent<AudioSource> ();
+	}
+
 	protected override void OnEnable ()
 	{
 		base.OnEnable ();
@@ -83,8 +91,10 @@ public class CharacterHit : CharacterComponent {
 
 			if(_characterIdentity.CharacterMovement.RightBlocked || _characterIdentity.CharacterMovement.LeftBlocked)
 				_isFalling = false;			
-			else if(Vector3.Distance(TransformRef.position,_destFallingPosition) < DISTANCE_TO_CHECK_IF_FALLING_DEST)				
+			else if(Vector3.Distance(TransformRef.position,_destFallingPosition) < DISTANCE_TO_CHECK_IF_FALLING_DEST)
+			{				
 				_isFalling = false;			
+			}
 		}
 			
 		#endif
@@ -126,6 +136,15 @@ public class CharacterHit : CharacterComponent {
 		ObjectPoolManager.Singleton.Instantiate(original,_fxHitParticlePosition.position,Constants.Quaternion.identity);
 	}
 
+	private void RaiseHitSound()
+	{
+		SFXManager.Singleton.PlayHitSound (_audioSource);
+	}
+
+	private void RaiseHitGroundSound()
+	{
+		SFXManager.Singleton.PlayHitTheGroundSound (_audioSource);
+	}
 	#endregion
 
 	#region Public methods
@@ -197,6 +216,7 @@ public class CharacterHit : CharacterComponent {
 			_characterIdentity.CharacterAnimation.SetAnimationInt("HitBack",hitNum);
 
 		CreateFxHitParticle(bigHit);
+		RaiseHitSound();
 
 		#endif
 		if(CharacterGetsHitEvent != null)

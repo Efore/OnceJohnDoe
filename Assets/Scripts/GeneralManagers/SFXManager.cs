@@ -21,6 +21,9 @@ public class SFXManager : MonoBehaviour
 	private AudioClip[] _hitSounds = null;
 
 	[SerializeField]
+	private AudioClip _missedAttackSounds = null;
+
+	[SerializeField]
 	private AudioClip[] _hitTheGroundSounds = null;
 
 	#endregion
@@ -59,7 +62,12 @@ public class SFXManager : MonoBehaviour
 
 	public void PlayHitTheGroundSound(AudioSource source)
 	{		
-		source.PlayOneShot(_hitTheGroundSounds[Random.Range(0,_hitSounds.Length)]);
+		source.PlayOneShot(_hitTheGroundSounds[Random.Range(0,_hitTheGroundSounds.Length)]);
+	}
+
+	public void PlayAttackSound(AudioSource source)
+	{		
+		source.PlayOneShot(_missedAttackSounds);
 	}
 
 	#endregion

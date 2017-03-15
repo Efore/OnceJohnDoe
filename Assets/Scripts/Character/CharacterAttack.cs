@@ -15,6 +15,8 @@ public class CharacterAttack : CharacterComponent {
 	private bool _pendingAttack = false;
 	private int _attackCounter = 0;
 	private Vector3 _posAfterAttackRunning = Vector3.zero;
+	private AudioSource _audioSource = null;
+
 
 	#endregion
 
@@ -54,6 +56,7 @@ public class CharacterAttack : CharacterComponent {
 	protected override void Awake ()
 	{
 		base.Awake ();
+		_audioSource = GetComponent<AudioSource> ();
 		NumMaxAttacks = _characterIdentity.CharacterStats.MaxAttacks;	
 	}
 
@@ -174,5 +177,9 @@ public class CharacterAttack : CharacterComponent {
 			CharacterAttacksCharacterEvent (victim);
 	}
 
+	public void PlayAttackSound(AudioClip clip)
+	{
+		_audioSource.PlayOneShot (clip);
+	}
 	#endregion
 }
