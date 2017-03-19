@@ -44,37 +44,46 @@ public class CharacterAnimation : CharacterComponent {
 
 	public void SetAnimationFloat(string paramName, float value)
 	{
-		_animator.SetFloat(paramName,value);
+		if(_animator != null)
+			_animator.SetFloat(paramName,value);
 	}
 
 	public void SetAnimationInt(string paramName, int value)
 	{
-		_animator.SetInteger(paramName,value);
+		if(_animator != null)
+			_animator.SetInteger(paramName,value);
 	}
 		
 	public void SetAnimationBool(string paramName, bool value)
 	{
-		_animator.SetBool(paramName,value);
+		if(_animator != null)
+			_animator.SetBool(paramName,value);
 	}
 
 	public void SetAnimationTrigger(string paramName)
 	{
-		_animator.SetTrigger (paramName);
+		if(_animator != null)
+			_animator.SetTrigger (paramName);
 	}
 
 	public bool CurrentAnimationIs(string animation)
 	{
-		return _animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer." + animation);
+		if(_animator != null)
+			return _animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer." + animation);
+		return false;
 	}
 
 	public float CurrentAnimationProgress()
-	{		
-		return _animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
+	{	
+		if(_animator != null)	
+			return _animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
+		return 0.0f;
 	}
 
 	public void StartAtAnimation(string animation)
 	{
-		_animator.Play (animation);
+		if(_animator != null)
+			_animator.Play (animation);
 	}
 
 

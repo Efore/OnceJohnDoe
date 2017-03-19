@@ -3,6 +3,8 @@
 using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(AudioSource))]
+[RequireComponent(typeof(SpriteRenderer))]
 public class CharacterHit : CharacterComponent {
 
 	#region Private members 
@@ -10,6 +12,8 @@ public class CharacterHit : CharacterComponent {
 	private Transform _fxHitParticlePosition = null;
 
 	private AudioSource _audioSource = null;
+
+	private Material _spriteMaterial = null;
 
 	private const float MIN_FALLING_DISTANCE = 1.0f;
 	private const float MAX_FALLING_DISTANCE = 5.0f;
@@ -68,6 +72,7 @@ public class CharacterHit : CharacterComponent {
 	{
 		base.Awake ();
 		_audioSource = GetComponent<AudioSource> ();
+		_spriteMaterial = GetComponent<SpriteRenderer> ().material;
 	}
 
 	protected override void OnEnable ()
@@ -100,9 +105,23 @@ public class CharacterHit : CharacterComponent {
 		#endif
 	}
 
+	void OnDestroy()
+	{
+		Destroy (_spriteMaterial);
+	}
+
 	#endregion
 
 	#region Private methods
+
+	private IEnumerator FlashAtHit()
+	{
+		_spriteMaterial.SetInt ("_FullColor", 1);
+		yield return new WaitForEndOfFrame ();
+		yield return new WaitForEndOfFrame ();
+		yield return new WaitForEndOfFrame ();
+		_spriteMaterial.SetInt ("_FullColor", 0);
+	}
 
 	protected override void RestartComponent ()
 	{
@@ -153,7 +172,8 @@ public class CharacterHit : CharacterComponent {
 	{
 		if(!CheckIfPossible() || hitNum == 0)
 			return;
-		
+
+		StartCoroutine (FlashAtHit ());
 		IsBeingHit = true;
 
 		bool front = attackerHeadingDirection != _characterIdentity.CharacterMovement.HeadingDirection;
