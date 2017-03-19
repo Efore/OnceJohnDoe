@@ -93,7 +93,7 @@ public class EnemyTameable : EnhancedMonoBehaviour
 	public void TameEnemy(Transform positionToFollow, CharacterStats tamerStats)
 	{
 		SwitchCollidersLayers ();
-
+		DeactivateUnusedElements ();
 		ModifyEnemyAIElements (positionToFollow);
 		_enemyIdentity.SpriteRenderer.sharedMaterial = _tamedEnemyMaterialReference;
 

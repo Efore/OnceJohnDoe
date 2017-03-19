@@ -173,7 +173,7 @@ public class DaniSpecialAttack : PlayerSpecialAttack
 
 		for (int i = 0; i < CharacterManager.Singleton.Enemies.Count; ++i)
 		{
-			if (CharacterManager.Singleton.Enemies [i].TransformRef.position.x * _characterIdentity.CharacterMovement.HeadingDirection.x >= 0)
+			if (_characterIdentity.TransformRef.InverseTransformPoint(CharacterManager.Singleton.Enemies [i].TransformRef.position).x > 0)
 				_enemiesInFront.Add (CharacterManager.Singleton.Enemies [i]);
 		}
 
@@ -211,7 +211,8 @@ public class DaniSpecialAttack : PlayerSpecialAttack
 		CameraManager.Singleton.SpecialEffectWaveScreen ();
 		foreach (EnemyIdentity enemy in CharacterManager.Singleton.Enemies)
 		{
-			enemy.CharacterInput.LockInput = true;
+			if(enemy.GetComponent<EnemyTameable>() != null)
+				enemy.CharacterInput.LockInput = true;
 		}
 	}
 
