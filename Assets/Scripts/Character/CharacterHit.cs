@@ -18,9 +18,11 @@ public class CharacterHit : CharacterComponent {
 	private const float MIN_FALLING_DISTANCE = 1.0f;
 	private const float MAX_FALLING_DISTANCE = 5.0f;
 	private const float DISTANCE_PER_DAMAGE_POINT = 0.15f;
-
 	private const float DISTANCE_TO_CHECK_IF_FALLING_DEST = 0.05f;
 	private const float LERPING_PARAM = 0.1f;
+	private const float FLASH_AT_HIT_DURATION = 0.05f;
+
+
 
 	private float _initialHealth;
 	private float _currentHealth;
@@ -117,9 +119,7 @@ public class CharacterHit : CharacterComponent {
 	private IEnumerator FlashAtHit()
 	{
 		_spriteMaterial.SetInt ("_FullColor", 1);
-		yield return new WaitForEndOfFrame ();
-		yield return new WaitForEndOfFrame ();
-		yield return new WaitForEndOfFrame ();
+		yield return new WaitForSeconds (FLASH_AT_HIT_DURATION);
 		_spriteMaterial.SetInt ("_FullColor", 0);
 	}
 
