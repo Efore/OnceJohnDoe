@@ -208,7 +208,7 @@ public class DaniSpecialAttack : PlayerSpecialAttack
 
 	public void CreateWaves()
 	{
-		CameraManager.Singleton.SpecialEffectWaveScreen ();
+		CameraManager.Singleton.SpecialEffectWaveScreen (TransformRef.position);
 		foreach (EnemyIdentity enemy in CharacterManager.Singleton.Enemies)
 		{
 			if(enemy.GetComponent<EnemyTameable>() != null)

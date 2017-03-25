@@ -8,6 +8,7 @@
 		_DistortionDamper("Distortion Damper", Float) = 200
 		_WaveIndex("Wave Index", Range(0.0,1.57)) = 0
 		_WaveColor("Wave Color", Color) = (1,1,1,1)
+		_XPosOrigin("X Origin", Float) = 0.5
 	}
 	SubShader
 	{
@@ -51,19 +52,20 @@
 			float _DistortionDamper;
 			float _WaveIndex;
 			fixed4 _WaveColor;
+			float _XPosOrigin;
 
 			fixed4 frag (v2f IN) : SV_Target
 			{
 				float offsetchange = sin(_WaveIndex);
 
-				if(IN.worldPos.x > 0.5)
+				if(IN.worldPos.x > _XPosOrigin)
 					offsetchange = sin(_WaveIndex) * -1;				
 
 				float2 offset = float2( tex2D(_NoiseTex, float2(IN.worldPos.x / _DistortionSpreader + offsetchange, 0)).g, 0);
 
 				offset -= 0.5;
 				float texOffset = offset/_DistortionDamper;
-				float waveIntensity = (abs(IN.worldPos.x - 0.5)/0.5);
+				float waveIntensity = (abs(IN.worldPos.x - _XPosOrigin)/(1 - _XPosOrigin));
 
 				texOffset = texOffset * waveIntensity;
 				_WaveColor = _WaveColor * waveIntensity;

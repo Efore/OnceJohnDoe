@@ -159,9 +159,10 @@ public class CameraManager : EnhancedMonoBehaviour
 		_cameraSpecialEffect.SpecialEffectFadeScreen (fadeIn, fadeTime, muteSound);
 	}
 
-	public void SpecialEffectWaveScreen()
+	public void SpecialEffectWaveScreen(Vector3 pos)
 	{
-		_cameraSpecialEffect.SpecialEffectWave ();
+		float xScreenPos = Camera.main.WorldToScreenPoint(pos).x / Camera.main.pixelWidth;
+		_cameraSpecialEffect.SpecialEffectWave (xScreenPos);
 	}
 
 	#endregion

@@ -1,14 +1,10 @@
-﻿Shader "Custom/TamedEnemyShader"
+﻿Shader "Custom/CustomCharacterSpriteShader"
 {
 	Properties
 	{
 		[PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
 		_Color ("Tint", Color) = (1,1,1,1)
-		[MaterialToggle] PixelSnap ("Pixel snap", Float) = 0
-
-		_NoiseTex ("Noise Texture", 2D) = "white" {}
-		_DistortionSpreader("Distortion Spreader", Range(-3,3)) = 1.2
-		_DistortionDamper("Distortion Damper", Range(0,300)) = 200
+		[MaterialToggle] _FullColor ("Activate Full Color", Float) = 0
 	}
 
 
@@ -61,9 +57,6 @@
 				OUT.vertex = mul(UNITY_MATRIX_MVP, OUT.worldPos);
 				OUT.texcoord = IN.texcoord;
 				OUT.color = IN.color * _Color;
-				#ifdef PIXELSNAP_ON
-				OUT.vertex = UnityPixelSnap (OUT.vertex);
-				#endif
 
 				return OUT;
 			}
@@ -84,21 +77,14 @@
 				return color;
 			}
 
-			sampler2D _NoiseTex;
-			float _DistortionSpreader;
-			float _DistortionDamper;
+			bool _FullColor;
 
 			fixed4 frag(v2f IN) : SV_Target
 			{
-				
-				float2 offset = float2( tex2D(_NoiseTex, float2(IN.worldPos.y / _DistortionSpreader + _Time[1], 0)).g, 0);
-
-				offset -= 0.5;
-
-				fixed4 c = SampleSpriteTexture (IN.texcoord + offset/_DistortionDamper) * IN.color;
+				fixed4 c = SampleSpriteTexture (IN.texcoord) * IN.color;
+				if(_FullColor == 1)
+					c.rgb = _Color.rgb;
 				c.rgb *= c.a;
-
-
 				return c;
 			}
 		ENDCG

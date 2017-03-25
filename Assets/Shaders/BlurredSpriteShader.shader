@@ -1,11 +1,9 @@
-﻿Shader "Custom/CustomSpriteShader"
+﻿Shader "Custom/BlurredSpriteShader"
 {
 	Properties
 	{
 		[PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
-		_Color ("Tint", Color) = (1,1,1,1)
-		_FullColor ("Activate Full Color", Range(0,1)) = 0
-		[MaterialToggle] PixelSnap ("Pixel snap", Float) = 0
+		_BlurAmount ("Blur amount",Range(0,1)) = 0
 	}
 
 
@@ -81,15 +79,28 @@
 				return color;
 			}
 
-			bool _FullColor;
+			float _BlurAmount;
 
-			fixed4 frag(v2f IN) : SV_Target
+			fixed4 frag(v2f i) : SV_Target
 			{
-				fixed4 c = SampleSpriteTexture (IN.texcoord) * IN.color;
-				if(_FullColor == 1)
-					c.rgb = _Color.rgb;
-				c.rgb *= c.a;
-				return c;
+				fixed4 c = SampleSpriteTexture (i.texcoord) * i.color;
+				half4 texcol = half4(0,0,0,0);
+			    float remaining=1.0f;
+			    float coef=1.0;
+			    float fI=0;
+			    for (int j = 0; j < 3; j++) {
+			    	fI++;
+			    	coef*=0.32;
+			    	texcol += tex2D(_MainTex, float2(i.texcoord.x, i.texcoord.y - fI * _BlurAmount)) * coef;
+			    	texcol += tex2D(_MainTex, float2(i.texcoord.x - fI * _BlurAmount, i.texcoord.y)) * coef;
+			    	texcol += tex2D(_MainTex, float2(i.texcoord.x + fI * _BlurAmount, i.texcoord.y)) * coef;
+			    	texcol += tex2D(_MainTex, float2(i.texcoord.x, i.texcoord.y + fI * _BlurAmount)) * coef;
+			    	
+			    	remaining-=4*coef;
+			    }
+			    texcol += tex2D(_MainTex, float2(i.texcoord.x, i.texcoord.y)) * remaining;
+
+				return texcol;
 			}
 		ENDCG
 		}

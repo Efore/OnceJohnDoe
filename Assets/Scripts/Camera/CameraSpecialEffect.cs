@@ -102,9 +102,10 @@ public class CameraSpecialEffect : MonoBehaviour
 		StartCoroutine (FadeCoroutine(fadeIn, fadeTime, muteSound));
 	}
 
-	public void SpecialEffectWave()
+	public void SpecialEffectWave(float xScreenPos)
 	{
 		_inUseMaterial = _wavedMaterial;
+		_inUseMaterial.SetFloat ("_XPosOrigin", xScreenPos);
 		this.enabled = true;
 		StartCoroutine (WaveCoroutine ());
 	}
