@@ -1,9 +1,9 @@
-﻿Shader "Custom/BlurredSpriteShader"
+﻿Shader "Custom/CustomCharacterSpriteShader"
 {
 	Properties
 	{
 		[PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
-		_blurSizeXY("BlurSizeXY", Range(0,20)) = 0
+		_BlurAmount ("Blur Amount", Range(1,20)) = 1
 	}
 
 
@@ -55,75 +55,29 @@
 				OUT.worldPos = IN.vertex;
 				OUT.vertex = mul(UNITY_MATRIX_MVP, OUT.worldPos);
 				OUT.texcoord = IN.texcoord;
-				OUT.color = IN.color * _Color;
-				#ifdef PIXELSNAP_ON
-				OUT.vertex = UnityPixelSnap (OUT.vertex);
-				#endif
+				OUT.color = IN.color;
 
 				return OUT;
 			}
 
 			sampler2D _MainTex;
-			sampler2D _AlphaTex;
+			float _BlurAmount;
+			float4 _MainTex_TexelSize;
 
-
-			fixed4 SampleSpriteTexture (float2 uv)
+			float4 box(sampler2D tex, float2 uv, float4 size)
 			{
-				fixed4 color = tex2D (_MainTex, uv);
+				float4 c = tex2D(tex, uv + float2(-size.x, size.y) * _BlurAmount) + tex2D(tex, uv + float2(0, size.y)* _BlurAmount ) + tex2D(tex, uv + float2(size.x, size.y) * _BlurAmount )+
+							tex2D(tex, uv + float2(-size.x, 0) * _BlurAmount )+ tex2D(tex, uv + float2(0, 0) * _BlurAmount) + tex2D(tex, uv + float2(size.x, 0) * _BlurAmount )+
+							tex2D(tex, uv + float2(-size.x, -size.y)* _BlurAmount ) + tex2D(tex, uv + float2(0, -size.y) * _BlurAmount )+ tex2D(tex, uv + float2(size.x, -size.y) * _BlurAmount) ;
 
-#if ETC1_EXTERNAL_ALPHA
-				// get the color from an external texture (usecase: Alpha support for ETC1 on android)
-				color.a = tex2D (_AlphaTex, uv).r;
-#endif //ETC1_EXTERNAL_ALPHA
-
-				return color;
+				return c / 9;
 			}
 
-			sampler2D _GrabTexture : register(s0);
-            float _blurSizeXY;
-
-			fixed4 frag(v2f i) : SV_Target
+			fixed4 frag(v2f IN) : SV_Target
 			{
-				fixed4 c = SampleSpriteTexture (i.texcoord) * i.color;
-				float2 screenPos = i.vertex.xy;
-				float depth= _blurSizeXY*0.0005;
-
-			    screenPos.x = (screenPos.x + 1) * 0.5;
-
-			    screenPos.y = 1-(screenPos.y + 1) * 0.5;
-
-			    half4 sum = half4(0.0h,0.0h,0.0h,0.0h);   
-			    sum += tex2D( _GrabTexture, float2(screenPos.x-5.0 * depth, screenPos.y+5.0 * depth)) * 0.025;    
-			    sum += tex2D( _GrabTexture, float2(screenPos.x+5.0 * depth, screenPos.y-5.0 * depth)) * 0.025;
-			    
-			    sum += tex2D( _GrabTexture, float2(screenPos.x-4.0 * depth, screenPos.y+4.0 * depth)) * 0.05;
-			    sum += tex2D( _GrabTexture, float2(screenPos.x+4.0 * depth, screenPos.y-4.0 * depth)) * 0.05;
-
-			    
-			    sum += tex2D( _GrabTexture, float2(screenPos.x-3.0 * depth, screenPos.y+3.0 * depth)) * 0.09;
-			    sum += tex2D( _GrabTexture, float2(screenPos.x+3.0 * depth, screenPos.y-3.0 * depth)) * 0.09;
-			    
-			    sum += tex2D( _GrabTexture, float2(screenPos.x-2.0 * depth, screenPos.y+2.0 * depth)) * 0.12;
-			    sum += tex2D( _GrabTexture, float2(screenPos.x+2.0 * depth, screenPos.y-2.0 * depth)) * 0.12;
-			    
-			    sum += tex2D( _GrabTexture, float2(screenPos.x-1.0 * depth, screenPos.y+1.0 * depth)) *  0.15;
-			    sum += tex2D( _GrabTexture, float2(screenPos.x+1.0 * depth, screenPos.y-1.0 * depth)) *  0.15;
-			    
-				
-
-			    sum += tex2D( _GrabTexture, screenPos-5.0 * depth) * 0.025;    
-			    sum += tex2D( _GrabTexture, screenPos-4.0 * depth) * 0.05;
-			    sum += tex2D( _GrabTexture, screenPos-3.0 * depth) * 0.09;
-			    sum += tex2D( _GrabTexture, screenPos-2.0 * depth) * 0.12;
-			    sum += tex2D( _GrabTexture, screenPos-1.0 * depth) * 0.15;    
-			    sum += tex2D( _GrabTexture, screenPos) * 0.16; 
-			    sum += tex2D( _GrabTexture, screenPos+5.0 * depth) * 0.15;
-			    sum += tex2D( _GrabTexture, screenPos+4.0 * depth) * 0.12;
-			    sum += tex2D( _GrabTexture, screenPos+3.0 * depth) * 0.09;
-			    sum += tex2D( _GrabTexture, screenPos+2.0 * depth) * 0.05;
-			    sum += tex2D( _GrabTexture, screenPos+1.0 * depth) * 0.025;
-			       
-				return sum/2;
+				fixed4 c = box(_MainTex, IN.texcoord, _MainTex_TexelSize) * IN.color ;
+				c.rgb *= c.a;
+				return c;
 			}
 		ENDCG
 		}
