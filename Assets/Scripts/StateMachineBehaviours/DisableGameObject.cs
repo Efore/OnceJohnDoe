@@ -6,12 +6,15 @@ public class DisableGameObject : StateMachineBehaviour {
 	public bool DestroyGameObject = true;
 
 	 // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
-	override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {		
-		animator.gameObject.SendMessage ("RaiseCharacterDissapearsEvent", SendMessageOptions.DontRequireReceiver);
-		animator.gameObject.SetActive(false);
+	override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {	
+		if (animator.gameObject != null)
+		{	
+			animator.gameObject.SendMessage ("RaiseCharacterDissapearsEvent", SendMessageOptions.DontRequireReceiver);
+			animator.gameObject.SetActive (false);
 
-		if(DestroyGameObject)
-			Destroy (animator.gameObject);
+			if (DestroyGameObject)
+				Destroy (animator.gameObject);
+		}
 	}
 
 	// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

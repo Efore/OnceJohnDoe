@@ -3,7 +3,7 @@
 	Properties
 	{
 		[PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
-		_BlurAmount ("Blur amount",Range(0,1)) = 0
+		_blurSizeXY("BlurSizeXY", Range(0,20)) = 0
 	}
 
 
@@ -79,28 +79,51 @@
 				return color;
 			}
 
-			float _BlurAmount;
+			sampler2D _GrabTexture : register(s0);
+            float _blurSizeXY;
 
 			fixed4 frag(v2f i) : SV_Target
 			{
 				fixed4 c = SampleSpriteTexture (i.texcoord) * i.color;
-				half4 texcol = half4(0,0,0,0);
-			    float remaining=1.0f;
-			    float coef=1.0;
-			    float fI=0;
-			    for (int j = 0; j < 3; j++) {
-			    	fI++;
-			    	coef*=0.32;
-			    	texcol += tex2D(_MainTex, float2(i.texcoord.x, i.texcoord.y - fI * _BlurAmount)) * coef;
-			    	texcol += tex2D(_MainTex, float2(i.texcoord.x - fI * _BlurAmount, i.texcoord.y)) * coef;
-			    	texcol += tex2D(_MainTex, float2(i.texcoord.x + fI * _BlurAmount, i.texcoord.y)) * coef;
-			    	texcol += tex2D(_MainTex, float2(i.texcoord.x, i.texcoord.y + fI * _BlurAmount)) * coef;
-			    	
-			    	remaining-=4*coef;
-			    }
-			    texcol += tex2D(_MainTex, float2(i.texcoord.x, i.texcoord.y)) * remaining;
+				float2 screenPos = i.vertex.xy;
+				float depth= _blurSizeXY*0.0005;
 
-				return texcol;
+			    screenPos.x = (screenPos.x + 1) * 0.5;
+
+			    screenPos.y = 1-(screenPos.y + 1) * 0.5;
+
+			    half4 sum = half4(0.0h,0.0h,0.0h,0.0h);   
+			    sum += tex2D( _GrabTexture, float2(screenPos.x-5.0 * depth, screenPos.y+5.0 * depth)) * 0.025;    
+			    sum += tex2D( _GrabTexture, float2(screenPos.x+5.0 * depth, screenPos.y-5.0 * depth)) * 0.025;
+			    
+			    sum += tex2D( _GrabTexture, float2(screenPos.x-4.0 * depth, screenPos.y+4.0 * depth)) * 0.05;
+			    sum += tex2D( _GrabTexture, float2(screenPos.x+4.0 * depth, screenPos.y-4.0 * depth)) * 0.05;
+
+			    
+			    sum += tex2D( _GrabTexture, float2(screenPos.x-3.0 * depth, screenPos.y+3.0 * depth)) * 0.09;
+			    sum += tex2D( _GrabTexture, float2(screenPos.x+3.0 * depth, screenPos.y-3.0 * depth)) * 0.09;
+			    
+			    sum += tex2D( _GrabTexture, float2(screenPos.x-2.0 * depth, screenPos.y+2.0 * depth)) * 0.12;
+			    sum += tex2D( _GrabTexture, float2(screenPos.x+2.0 * depth, screenPos.y-2.0 * depth)) * 0.12;
+			    
+			    sum += tex2D( _GrabTexture, float2(screenPos.x-1.0 * depth, screenPos.y+1.0 * depth)) *  0.15;
+			    sum += tex2D( _GrabTexture, float2(screenPos.x+1.0 * depth, screenPos.y-1.0 * depth)) *  0.15;
+			    
+				
+
+			    sum += tex2D( _GrabTexture, screenPos-5.0 * depth) * 0.025;    
+			    sum += tex2D( _GrabTexture, screenPos-4.0 * depth) * 0.05;
+			    sum += tex2D( _GrabTexture, screenPos-3.0 * depth) * 0.09;
+			    sum += tex2D( _GrabTexture, screenPos-2.0 * depth) * 0.12;
+			    sum += tex2D( _GrabTexture, screenPos-1.0 * depth) * 0.15;    
+			    sum += tex2D( _GrabTexture, screenPos) * 0.16; 
+			    sum += tex2D( _GrabTexture, screenPos+5.0 * depth) * 0.15;
+			    sum += tex2D( _GrabTexture, screenPos+4.0 * depth) * 0.12;
+			    sum += tex2D( _GrabTexture, screenPos+3.0 * depth) * 0.09;
+			    sum += tex2D( _GrabTexture, screenPos+2.0 * depth) * 0.05;
+			    sum += tex2D( _GrabTexture, screenPos+1.0 * depth) * 0.025;
+			       
+				return sum/2;
 			}
 		ENDCG
 		}
