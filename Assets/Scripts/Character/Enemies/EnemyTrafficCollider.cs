@@ -38,7 +38,8 @@ public class EnemyTrafficCollider : EnhancedMonoBehaviour
 		if (_hasToStop || _characterMovement.IsRunning)
 			return;
 		
-		if (_characterMovement.HeadingDirection.x != other.GetComponent<EnemyTrafficCollider> ().CharacterMovement.HeadingDirection.x)
+		if (_characterMovement.gameObject.tag != other.gameObject.tag ||
+			_characterMovement.HeadingDirection.x != other.GetComponent<EnemyTrafficCollider> ().CharacterMovement.HeadingDirection.x)
 			return;
 
 		if((_characterMovement.HeadingDirection.x < 0 && TransformRef.position.x > other.transform.position.x) ||
