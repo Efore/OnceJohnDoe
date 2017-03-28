@@ -71,6 +71,9 @@ public class CameraManager : EnhancedMonoBehaviour
 	protected override void Update ()
 	{
 		base.Update ();
+		if (_cameraSpecialEffect.IsShaking)
+			return;
+		
 		float prevX = TransformRef.position.x;
 		TransformRef.position = _playerToFollow.TransformRef.position + (Vector3.back) * 10;
 		CorrectCameraPosition();
@@ -93,43 +96,12 @@ public class CameraManager : EnhancedMonoBehaviour
 
 	#region Private methods
 
-	private	IEnumerator ShakeCoroutine() {
-
-		float elapsed = 0.0f;
-
-		Vector3 originalCamPos = TransformRef.position;
-
-		while (elapsed < _shakeDuration) {
-
-			elapsed += Time.deltaTime;          
-
-			float percentComplete = elapsed / _shakeDuration;         
-			float damper = 1.0f - Mathf.Clamp(4.0f * percentComplete - 3.0f, 0.0f, 1.0f);
-
-			// map value to [-1, 1]
-			float x = Random.value * 2.0f - 1.0f;
-			float y = Random.value * 2.0f - 1.0f;
-			x *= _shakeMagnitude * damper;
-			y *= _shakeMagnitude * damper;
-
-			TransformRef.position += new Vector3(x, y, 0);
-
-			yield return null;
-		}
-
-		TransformRef.position = originalCamPos;
-	}
-
 	private void RaiseShake(CharacterIdentity attacker, bool bigHit)
 	{
-		if(bigHit)
+		if (bigHit)
 			return;
 		
-		if(_shakeCoroutine != null)
-		{
-			StopCoroutine(_shakeCoroutine);
-		}
-		_shakeCoroutine = StartCoroutine(ShakeCoroutine());
+		_cameraSpecialEffect.SpecialEffectShake (TransformRef);
 	}
 
 	private void CorrectCameraPosition()

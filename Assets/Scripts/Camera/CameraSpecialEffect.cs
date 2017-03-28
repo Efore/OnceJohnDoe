@@ -6,18 +6,33 @@ public class CameraSpecialEffect : MonoBehaviour
 	#region Private members
 	private const float MAX_WAVE_INCR = Mathf.PI / 2.0f;
 
+	[Header("Camera Shake params")]
+	[SerializeField]private float _cameraShakeRatio = 0.1f;
+	[SerializeField]private float _shakingTime = 0.3f;
+
+	[Header("Full Screen Shaders")]
 	[SerializeField]private Material _fadeInMaterial = null;
 	[SerializeField]private Material _wavedMaterial = null;
 
 	private Material _inUseMaterial = null;
 
+	private Vector3 _preShakeCameraPos;
+
 	#endregion
 
 	#region Public members
 
+
+
 	#endregion
 
 	#region Properties
+
+	public bool IsShaking
+	{
+		get;
+		set;
+	}
 
 	#endregion
 
@@ -40,6 +55,22 @@ public class CameraSpecialEffect : MonoBehaviour
 	#endregion
 
 	#region Private methods
+
+	private IEnumerator SpecialEffectShakeCoroutine(Transform cameraTrans, float shakeTime)
+	{		
+		IsShaking = true;
+		float goalTime = Time.realtimeSinceStartup + shakeTime;
+
+		while (Time.realtimeSinceStartup < goalTime)
+		{
+			cameraTrans.position = _preShakeCameraPos + new Vector3 (Random.Range (-_cameraShakeRatio, _cameraShakeRatio),
+				Random.Range (-_cameraShakeRatio, _cameraShakeRatio), Random.Range (-_cameraShakeRatio, _cameraShakeRatio));
+			yield return new WaitForEndOfFrame ();
+		}
+
+		cameraTrans.transform.position = _preShakeCameraPos;
+		IsShaking = false;
+	}
 
 	private IEnumerator FadeCoroutine(bool fadeIn, float fadeTime, bool muteSound)
 	{
@@ -94,6 +125,12 @@ public class CameraSpecialEffect : MonoBehaviour
 	#endregion
 
 	#region Public methods
+
+	public void SpecialEffectShake(Transform cameraTrans,float shakeTime = 0.3f)
+	{
+		_preShakeCameraPos = cameraTrans.position;
+		StartCoroutine (SpecialEffectShakeCoroutine (cameraTrans, _shakingTime));
+	}
 
 	public void SpecialEffectFadeScreen(bool fadeIn, float fadeTime = 0.3f, bool muteSound = true)
 	{		
