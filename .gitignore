@@ -1,6 +1,6 @@
 # Local ignores
 exe/
-Assets/Textures/
+Assets/Graphics/Textures/
 Assets/ShaderForge/
 Library/
 Temp/
