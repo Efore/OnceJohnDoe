@@ -13,6 +13,7 @@ public class CameraSpecialEffect : MonoBehaviour
 	[Header("Full Screen Shaders")]
 	[SerializeField]private Material _fadeInMaterial = null;
 	[SerializeField]private Material _wavedMaterial = null;
+	[SerializeField]private Material _shockWaveMaterial = null;
 
 	private Material _inUseMaterial = null;
 
@@ -44,7 +45,7 @@ public class CameraSpecialEffect : MonoBehaviour
 
 	void Awake()
 	{
-		_inUseMaterial = _fadeInMaterial;
+		_inUseMaterial = _shockWaveMaterial;
 	}
 
 	void OnRenderImage(RenderTexture srcTexture, RenderTexture destTexture)
@@ -55,6 +56,14 @@ public class CameraSpecialEffect : MonoBehaviour
 	#endregion
 
 	#region Private methods
+
+	private IEnumerator WaveHitCoroutine(Vector3 center)
+	{
+		float xScreenPos = Camera.main.WorldToScreenPoint(center).x / Camera.main.pixelWidth;
+		float yScreenPos = Camera.main.WorldToScreenPoint(center).y / Camera.main.pixelHeight;
+		_shockWaveMaterial.SetVector ("_Center", new Vector3(xScreenPos,yScreenPos,0.0f));
+		yield break;
+	}
 
 	private IEnumerator SpecialEffectShakeCoroutine(Transform cameraTrans, float shakeTime)
 	{		
