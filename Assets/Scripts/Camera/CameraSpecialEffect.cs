@@ -45,7 +45,7 @@ public class CameraSpecialEffect : MonoBehaviour
 
 	void Awake()
 	{
-		_inUseMaterial = _shockWaveMaterial;
+		_inUseMaterial = _fadeInMaterial;
 	}
 
 	void OnRenderImage(RenderTexture srcTexture, RenderTexture destTexture)

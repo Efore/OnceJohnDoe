@@ -21,7 +21,6 @@ public class BassistBossAI : BossAI
 	private const float DISTANCE_TO_CHECK_IF_FALLING_DEST = 0.1f;
 
 	[SerializeField] private DialogUnit _dialogPreBattle = null;
-	[SerializeField] private DialogUnit _dialogPostBattle = null;
 
 	[Header ("Params for Special Attacks")]
 	[SerializeField]
@@ -86,6 +85,9 @@ public class BassistBossAI : BossAI
 	{
 		base.Awake ();
 
+		_characterIdentity.CharacterHit.CharacterGetsHitEvent += delegate {
+			PlayVictoryScene();
+		};
 		_characterIdentity.CharacterHit.HealthChangeEvent += ChangeMaxTimeBetweenSpecials;
 		DialogManager.Singleton.CurrentDialogEndedEvent += DialogEndedCallback;
 	}
@@ -160,11 +162,7 @@ public class BassistBossAI : BossAI
 	private void DialogEndedCallback (DialogUnit dialog)
 	{
 		if (dialog == _dialogPreBattle)
-			StartBehaviour ();
-		else if (dialog == _dialogPostBattle)
-		{
-			_characterIdentity.CharacterAnimation.SetAnimationBool ("Die", false);
-		}
+			StartBehaviour ();		
 	}
 
 	private void FillOriginsList()
@@ -301,10 +299,6 @@ public class BassistBossAI : BossAI
 		_leftSpeakersOrigins.RemoveAt (0);
 	}
 
-	private void ShowPostBattleDialog()
-	{
-		DialogManager.Singleton.ShowDialog (_dialogPostBattle);
-	}
 	#endregion
 
 	#region Public methods
@@ -314,6 +308,11 @@ public class BassistBossAI : BossAI
 		((BossIdentity)_characterIdentity).ActivateBoss ();
 		CreateSpeakers ();
 		_behaviourCoroutine = StartCoroutine (BassistBehaviorCoroutine ());
+	}
+
+	public void PlayVictoryScene()
+	{
+		GameManager.Singleton.ChangeScene (UIManager.Singleton.player1Info.VictorySceneName);
 	}
 
 	#endregion

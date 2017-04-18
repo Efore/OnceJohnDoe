@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class UICharacterInfo : MonoBehaviour
@@ -11,17 +12,24 @@ public class UICharacterInfo : MonoBehaviour
 	[SerializeField]private GameObject _mpBarParticles = null;
 	[SerializeField]private Sprite _lowHealthFace = null;
 	[SerializeField]private Sprite _alternativeFace = null;
-	public UnityEngine.UI.Text livesText = null;
+	[SerializeField]private string _victorySceneName = "";
 
 	private Sprite _regularFace = null;
 	#endregion
 
 	#region Public members
 
+	public UnityEngine.UI.Text livesText = null;
 
 	#endregion
 
 	#region Properties
+
+	public string VictorySceneName
+	{
+		get { return _victorySceneName; }
+	}
+
 	#endregion
 
 	#region Events
