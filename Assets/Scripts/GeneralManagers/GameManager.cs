@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
@@ -19,6 +20,10 @@ public class GameManager : MonoBehaviour
 
 	private PlayerIdentity _player1Character = null;
 	private PlayerIdentity _player2Character = null;
+
+	private AsyncOperation _asyncOp = null;
+
+	private List<string> _scenesPreloaded =  new List<string>();
 
 	#endregion
 
@@ -61,6 +66,13 @@ public class GameManager : MonoBehaviour
 	#endregion
 
 	#region Private methods
+
+	private IEnumerator PreloadSceneCoroutine(string sceneName)
+	{
+		_asyncOp = SceneManager.LoadSceneAsync (sceneName);
+		_asyncOp.allowSceneActivation = false;
+		yield return _asyncOp;
+	}
 
 	private void ManagePlayer1Lives()
 	{
@@ -145,14 +157,18 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-	public void ChangeScene(int sceneIndex)
-	{
-		SceneManager.LoadScene (sceneIndex, LoadSceneMode.Single);
-	}
-
-	public void ChangeScene(string sceneName)
+	public void LoadScene(string sceneName)
 	{
 		SceneManager.LoadScene (sceneName,LoadSceneMode.Single);
+	}
+
+	public void PreloadScene(string sceneName)
+	{
+		if (_scenesPreloaded.Contains (sceneName))
+			return;
+
+		_scenesPreloaded.Add (sceneName);
+		StartCoroutine (PreloadSceneCoroutine (sceneName));
 	}
 
 	#endregion

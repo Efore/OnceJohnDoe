@@ -45,6 +45,9 @@ public class DebugOptions : MonoBehaviour
 
 	void Update()
 	{
+		if (!Debug.isDebugBuild)
+			return;
+		
 		if (Input.GetKeyDown (_keyForMovingToBossPosition))
 			CharacterManager.Singleton.GetPlayer (0).gameObject.transform.position = _startBossPosition.position;
 	}

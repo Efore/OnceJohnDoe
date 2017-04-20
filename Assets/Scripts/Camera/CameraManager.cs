@@ -21,11 +21,6 @@ public class CameraManager : EnhancedMonoBehaviour
 	private float _rightLimit;
 	private float _cameraWidth;
 	private CameraBorder[] _cameraBorders;
-	private Coroutine _shakeCoroutine = null;
-
-	[Header("Shaking params")]
-	[SerializeField]private float _shakeDuration = 0.5f;
-	[SerializeField]private float _shakeMagnitude = 0.5f;
 
 	[Header("Backgrounds to move with the camera")]
 	[SerializeField] private GameObject [] _bgsBack;

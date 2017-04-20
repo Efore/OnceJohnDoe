@@ -58,7 +58,7 @@ public class MainMenu : MonoBehaviour
 		CameraSpecialEffect fadeInEffect = Camera.main.GetComponent<CameraSpecialEffect> ();
 		fadeInEffect.SpecialEffectFadeScreen (true);
 		yield return new WaitForSeconds (1.0f);
-		GameManager.Singleton.ChangeScene (1);
+		GameManager.Singleton.LoadScene ("char_selection");
 	}
 
 	private IEnumerator LeftRightCoroutine()

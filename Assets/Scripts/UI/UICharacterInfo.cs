@@ -42,6 +42,12 @@ public class UICharacterInfo : MonoBehaviour
 		_regularFace = _characterFace.sprite;
 	}
 
+	void Start()
+	{
+		if(_victorySceneName != "")
+			GameManager.Singleton.PreloadScene (_victorySceneName);
+	}
+
 	#endregion
 
 	#region Private methods

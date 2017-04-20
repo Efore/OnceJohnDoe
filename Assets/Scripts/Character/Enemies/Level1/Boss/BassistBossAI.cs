@@ -312,7 +312,7 @@ public class BassistBossAI : BossAI
 
 	public void PlayVictoryScene()
 	{
-		GameManager.Singleton.ChangeScene (UIManager.Singleton.player1Info.VictorySceneName);
+		GameManager.Singleton.LoadScene (UIManager.Singleton.player1Info.VictorySceneName);
 	}
 
 	#endregion

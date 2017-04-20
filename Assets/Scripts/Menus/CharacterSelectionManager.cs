@@ -76,7 +76,7 @@ public class CharacterSelectionManager : MonoBehaviour
 		CameraSpecialEffect fadeInEffect = Camera.main.GetComponent<CameraSpecialEffect> ();
 		fadeInEffect.SpecialEffectFadeScreen (true);
 		yield return new WaitForSeconds (1.0f);
-		GameManager.Singleton.ChangeScene (2);
+		GameManager.Singleton.LoadScene ("level1");
 	}
 
 	private void NextCharacter()
