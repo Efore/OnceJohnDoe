@@ -132,6 +132,11 @@ public class CameraManager : EnhancedMonoBehaviour
 		_cameraSpecialEffect.SpecialEffectWave (xScreenPos);
 	}
 
+	public void SpecialEffectHitWave(Vector3 pos, bool bigHit)
+	{
+		_cameraSpecialEffect.SpecialEffectHitWave (pos, bigHit);
+	}
+
 	#endregion
 
 }

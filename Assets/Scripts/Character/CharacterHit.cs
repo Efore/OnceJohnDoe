@@ -152,6 +152,7 @@ public class CharacterHit : CharacterComponent {
 	private void CreateFxHitParticle(bool bigHit)
 	{
 		GameObject original = bigHit ? FxManager.Singleton.fxPrefabHitCharacterText : FxManager.Singleton.fxPrefabHitCharacter;
+		CameraManager.Singleton.SpecialEffectHitWave (_fxHitParticlePosition.position, bigHit);
 		ObjectPoolManager.Singleton.Instantiate(original,_fxHitParticlePosition.position,Constants.Quaternion.identity);
 	}
 

@@ -1,13 +1,11 @@
-Shader "Custom/ShockWaveShader"
+Shader "Custom/WaveAtHitShader"
 {
 	Properties
 	{
 		_MainTex ("Main Texture", 2D) = "black" {}
+		_RenderedTex ("Rendered Texture", 2D) = "black" {}
 		_NoiseTex ("Noise Texture", 2D) = "black" {}
-		_Ratio("Ratio", Range(0,1)) = 0
-		_Thickness("Thickness", Range(0.01,1)) = 0
 		_WaveColor("Wave Color", Color) = (1,1,1,1)
-		_Center("Center", Vector) = (0,0,0,0)
 	}
 	SubShader
 	{
@@ -46,17 +44,10 @@ Shader "Custom/ShockWaveShader"
 			}
 					
 			sampler2D _MainTex;
+			sampler2D _RenderedTex;
 			sampler2D _NoiseTex;
 			fixed4 _WaveColor;
-			float _Ratio;
-			float2 _Center;
 			float _Thickness; 
-
-			float AspectRatioDistance(float2 pointA, float2 pointB)
-			{
-				float screenRatio = _ScreenParams.x/_ScreenParams.y;
-				return sqrt(pow(pointA.x - pointB.x,2) + pow(pointA.y / screenRatio - pointB.y / screenRatio,2));
-			}
 
 			fixed4 frag (v2f IN) : SV_Target
 			{
@@ -67,18 +58,14 @@ Shader "Custom/ShockWaveShader"
 				float2 offset = float2( tex2D(_NoiseTex, float2(IN.worldPos.x / distorsionSpreader + offsetchange, 0)).g, 
 				tex2D(_NoiseTex, float2(0, IN.worldPos.y / distorsionSpreader + offsetchange)).g);
 
-				float dist = AspectRatioDistance(_Center.xy,IN.worldPos.xy);
-
 				offset -= 0.5;
 				float texOffset = offset/distorsionDamper;
 
 				fixed4 waveColor = _WaveColor;
 
-				float totalThickness = _Ratio + _Thickness;
-
-				if(dist < _Ratio || dist > totalThickness)
+				if(tex2D(_RenderedTex, float2(IN.worldPos.x, IN.worldPos.y)).r > 0)
 				{
-					waveColor = (1,1,1,1);
+					waveColor = 1;
 					texOffset = 0;
 				}
 

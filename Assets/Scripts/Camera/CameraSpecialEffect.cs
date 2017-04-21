@@ -1,23 +1,34 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class CameraSpecialEffect : MonoBehaviour
-{
+{	
 	#region Private members
 	private const float MAX_WAVE_INCR = Mathf.PI / 2.0f;
+	private const float SMALL_HIT_WAVE_SCALE = 2f;
+	private const float BIG_HIT_WAVE_SCALE = 3f;
 
 	[Header("Camera Shake params")]
 	[SerializeField]private float _cameraShakeRatio = 0.1f;
 	[SerializeField]private float _shakingTime = 0.3f;
 
+	[Header("Wave at Hit params")]
+	[SerializeField]
+	private GameObject _hitWaveRingPrefab = null;
+	[SerializeField]
+	private Camera _waveAtHitCamera = null;
+
 	[Header("Full Screen Shaders")]
 	[SerializeField]private Material _fadeInMaterial = null;
-	[SerializeField]private Material _wavedMaterial = null;
-	[SerializeField]private Material _shockWaveMaterial = null;
+	[SerializeField]private Material _wavedScreenMaterial = null;
+	[SerializeField]private Material _waveAtHitMaterial = null;
 
 	private Material _inUseMaterial = null;
 
 	private Vector3 _preShakeCameraPos;
+
+	private List<HitWaveBehaviour> _hitWaveRings = new List<HitWaveBehaviour>();
 
 	#endregion
 
@@ -57,14 +68,6 @@ public class CameraSpecialEffect : MonoBehaviour
 
 	#region Private methods
 
-	private IEnumerator WaveHitCoroutine(Vector3 center)
-	{
-		float xScreenPos = Camera.main.WorldToScreenPoint(center).x / Camera.main.pixelWidth;
-		float yScreenPos = Camera.main.WorldToScreenPoint(center).y / Camera.main.pixelHeight;
-		_shockWaveMaterial.SetVector ("_Center", new Vector3(xScreenPos,yScreenPos,0.0f));
-		yield break;
-	}
-
 	private IEnumerator SpecialEffectShakeCoroutine(Transform cameraTrans, float shakeTime)
 	{		
 		IsShaking = true;
@@ -95,7 +98,7 @@ public class CameraSpecialEffect : MonoBehaviour
 			{				
 				AudioListener.volume += alphaIncr;
 				alpha += alphaIncr;
-				_fadeInMaterial.SetFloat("_Alpha",alpha);
+				_inUseMaterial.SetFloat("_Alpha",alpha);
 				yield return waitForSeconds;
 			} while(alpha < 1.0f);
 		}
@@ -106,7 +109,7 @@ public class CameraSpecialEffect : MonoBehaviour
 				if(muteSound)					
 					AudioListener.volume -= alphaIncr;
 				alpha -= alphaIncr;
-				_fadeInMaterial.SetFloat("_Alpha",alpha);				
+				_inUseMaterial.SetFloat("_Alpha",alpha);				
 				yield return waitForSeconds;
 			} while(alpha > 0.0f);
 			this.enabled = false;
@@ -122,13 +125,13 @@ public class CameraSpecialEffect : MonoBehaviour
 		float waveIndex = 0.0f;
 		do
 		{	
-			_wavedMaterial.SetFloat("_WaveIndex",waveIndex);
+			_wavedScreenMaterial.SetFloat("_WaveIndex",waveIndex);
 			waveIndex += waveIncrease;
 			yield return waitForSeconds;
 		} while(waveIndex < MAX_WAVE_INCR);
 
 		this.enabled = false;
-		_wavedMaterial.SetFloat("_WaveIndex",0.0f);
+		_inUseMaterial.SetFloat("_WaveIndex",0.0f);
 	}
 
 	#endregion
@@ -150,10 +153,34 @@ public class CameraSpecialEffect : MonoBehaviour
 
 	public void SpecialEffectWave(float xScreenPos)
 	{
-		_inUseMaterial = _wavedMaterial;
+		_inUseMaterial = _wavedScreenMaterial;
 		_inUseMaterial.SetFloat ("_XPosOrigin", xScreenPos);
 		this.enabled = true;
 		StartCoroutine (WaveCoroutine ());
+	}
+
+	public void SpecialEffectHitWave(Vector3 position, bool bigHit)
+	{
+		this.enabled = true;
+		if(!_waveAtHitCamera.enabled)
+		{
+			_waveAtHitCamera.enabled = true;
+			_waveAtHitCamera.Render ();				
+		}
+		HitWaveBehaviour newHitWave = ObjectPoolManager.Singleton.Instantiate (_hitWaveRingPrefab, position, Constants.Quaternion.identity).GetComponent<HitWaveBehaviour> ();
+		newHitWave.WaveFinishedEvent += delegate {
+			_hitWaveRings.Remove(newHitWave);
+			newHitWave.gameObject.SetActive(false);
+			if(_hitWaveRings.Count == 0)
+			{
+				this.enabled = false;
+				_waveAtHitCamera.enabled = false;
+			}
+		};
+
+		newHitWave.MaxScale = bigHit ? BIG_HIT_WAVE_SCALE : SMALL_HIT_WAVE_SCALE;
+		_hitWaveRings.Add (newHitWave);
+		_inUseMaterial = _waveAtHitMaterial;
 	}
 	 
 	#endregion
