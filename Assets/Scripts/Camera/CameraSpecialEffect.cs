@@ -50,6 +50,9 @@ public class CameraSpecialEffect : MonoBehaviour
 
 	#region Events
 
+	public delegate void FadeFinished();
+	public event FadeFinished FadeFinishedEvent;
+
 	#endregion
 
 	#region MonoBehaviour calls
@@ -116,6 +119,8 @@ public class CameraSpecialEffect : MonoBehaviour
 			if(CharacterManager.Singleton != null)
 				CharacterManager.Singleton.LockPlayersInput (false);
 		}
+		if (FadeFinishedEvent != null)
+			FadeFinishedEvent ();
 	}
 
 	private IEnumerator WaveCoroutine()

@@ -74,7 +74,7 @@ public class SpawnEnemiesTrigger : EnhancedMonoBehaviour
 			if (enemy.GetComponent<EnemyTameable> () != null)
 				enemy.GetComponent<EnemyTameable> ().EnemyTamedEvent += EnemyTamed;
 			
-			yield return new WaitForSeconds(0.1f);
+			yield return new WaitForSeconds(0.5f);
 		}
 	}
 

@@ -17,6 +17,9 @@ public class CharacterSelectionManager : MonoBehaviour
 
 	#region Private members
 
+	[SerializeField]
+	private GameObject _loadingScreenGameObject = null;
+
 	private CharacterSelectionMember[] _characterSelectionMembers;
 	private CharacterSelectionMember _currentSelectedCharacter = null;
 	private int _currentSelectedCharacterIndex = 0;
@@ -70,15 +73,6 @@ public class CharacterSelectionManager : MonoBehaviour
 
 	#region Private methods
 
-	private IEnumerator StartGameCoroutine()
-	{
-		GameManager.Singleton.player1CharacterPrefab = _currentSelectedCharacter.inGamePrefab;
-		CameraSpecialEffect fadeInEffect = Camera.main.GetComponent<CameraSpecialEffect> ();
-		fadeInEffect.SpecialEffectFadeScreen (true);
-		yield return new WaitForSeconds (1.0f);
-		GameManager.Singleton.LoadScene ("level1");
-	}
-
 	private void NextCharacter()
 	{
 		_currentSelectedCharacterIndex++;
@@ -104,7 +98,14 @@ public class CharacterSelectionManager : MonoBehaviour
 	{
 		if (_currentSelectedCharacter.inGamePrefab != null)
 		{
-			StartCoroutine (StartGameCoroutine ());
+			GameManager.Singleton.player1CharacterPrefab = _currentSelectedCharacter.inGamePrefab;
+			CameraSpecialEffect fadeInEffect = Camera.main.GetComponent<CameraSpecialEffect> ();
+			fadeInEffect.FadeFinishedEvent += delegate {
+//				_loadingScreenGameObject.SetActive(true);
+//				fadeInEffect.enabled = false;
+				GameManager.Singleton.LoadScene ("level1");	
+			};
+			fadeInEffect.SpecialEffectFadeScreen (true);
 		}
 		else
 			Debug.Log ("Character locked");

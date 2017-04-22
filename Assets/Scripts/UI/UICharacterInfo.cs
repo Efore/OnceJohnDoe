@@ -15,6 +15,8 @@ public class UICharacterInfo : MonoBehaviour
 	[SerializeField]private string _victorySceneName = "";
 
 	private Sprite _regularFace = null;
+	private Sprite _currentFace = null;
+
 	#endregion
 
 	#region Public members
@@ -40,6 +42,7 @@ public class UICharacterInfo : MonoBehaviour
 	void Awake()
 	{
 		_regularFace = _characterFace.sprite;
+		_currentFace = _regularFace;
 	}
 
 	void Start()
@@ -64,9 +67,11 @@ public class UICharacterInfo : MonoBehaviour
 			return;
 		
 		if (relativeHealth < 0.3f)
-			_characterFace.sprite = _lowHealthFace;
-		else if (_characterFace.sprite != _regularFace)
-			_characterFace.sprite = _regularFace;
+			_currentFace = _lowHealthFace;
+		else if (_currentFace != _regularFace)
+			_currentFace = _regularFace;
+
+		_characterFace.sprite = _currentFace;
 	}
 
 	public void MetalPointsChangedCallback(float relativeMP)
@@ -87,7 +92,7 @@ public class UICharacterInfo : MonoBehaviour
 		if (active)
 			_characterFace.sprite = _alternativeFace;
 		else
-			_characterFace.sprite = _regularFace;
+			_characterFace.sprite = _currentFace;
 	}
 
 	#endregion

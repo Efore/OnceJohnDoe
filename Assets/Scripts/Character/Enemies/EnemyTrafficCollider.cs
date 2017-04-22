@@ -53,6 +53,7 @@ public class EnemyTrafficCollider : EnhancedMonoBehaviour
 
 	private IEnumerator StopForAWhile()
 	{
+		Debug.Log ("stopYtal");
 		_hasToStop = true;
 		_characterMovement.HasToWait = true;
 		yield return new WaitForSeconds (TIME_FOR_TRAFFIC);
