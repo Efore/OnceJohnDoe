@@ -18,7 +18,11 @@ public class CharacterSelectionManager : MonoBehaviour
 	#region Private members
 
 	[SerializeField]
-	private GameObject _loadingScreenGameObject = null;
+	private AudioSource _audioSource = null;
+	[SerializeField]
+	private AudioClip _changeCharacterSound = null;
+	[SerializeField]
+	private AudioClip _selectCharacterSound = null;
 
 	private CharacterSelectionMember[] _characterSelectionMembers;
 	private CharacterSelectionMember _currentSelectedCharacter = null;
@@ -75,6 +79,7 @@ public class CharacterSelectionManager : MonoBehaviour
 
 	private void NextCharacter()
 	{
+		_audioSource.PlayOneShot (_changeCharacterSound);
 		_currentSelectedCharacterIndex++;
 		_currentSelectedCharacterIndex = _currentSelectedCharacterIndex % _characterSelectionMembers.Length;
 		_currentSelectedCharacter.SetSelected (false);
@@ -84,6 +89,7 @@ public class CharacterSelectionManager : MonoBehaviour
 
 	private void PreviousCharacter()
 	{
+		_audioSource.PlayOneShot (_changeCharacterSound);
 		_currentSelectedCharacterIndex--;
 
 		if (_currentSelectedCharacterIndex < 0)
@@ -105,7 +111,8 @@ public class CharacterSelectionManager : MonoBehaviour
 //				fadeInEffect.enabled = false;
 				GameManager.Singleton.LoadScene ("level1");	
 			};
-			fadeInEffect.SpecialEffectFadeScreen (true);
+			_audioSource.PlayOneShot (_selectCharacterSound);
+			fadeInEffect.SpecialEffectFadeScreen (true, 0.75f);
 		}
 		else
 			Debug.Log ("Character locked");

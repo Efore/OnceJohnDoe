@@ -13,6 +13,11 @@ public class UIManager : MonoBehaviour
 	[SerializeField] private Transform _player2InfoPos = null;
 	[SerializeField] private Transform _bossInfoPos = null;
 
+	[Header("GoText elements")]
+	[SerializeField] private AudioSource _audioSource = null;
+	[SerializeField] private GameObject _goText = null;
+	[SerializeField] private AudioClip _goTextSound = null;
+
 	#endregion
 
 	#region Public members
@@ -20,8 +25,6 @@ public class UIManager : MonoBehaviour
 	[HideInInspector] public UICharacterInfo player1Info = null;
 	[HideInInspector] public UICharacterInfo player2Info = null;
 	[HideInInspector] public UICharacterInfo bossInfo = null;
-
-
 
 	#endregion
 
@@ -45,6 +48,21 @@ public class UIManager : MonoBehaviour
 	#endregion
 
 	#region Private methods
+
+	private IEnumerator GoTextCoroutine()
+	{
+		int timesShowing = 3;
+		while (timesShowing > 0)
+		{
+			_goText.SetActive (true);
+			_audioSource.PlayOneShot (_goTextSound);
+			yield return new WaitForSeconds (0.5f);
+			_goText.SetActive (false);
+			yield return new WaitForSeconds (0.75f);
+			timesShowing--;
+		}
+	}
+
 	#endregion
 
 	#region Public methods
@@ -81,6 +99,11 @@ public class UIManager : MonoBehaviour
 	{
 		if(bossInfo != null)
 			Destroy (bossInfo.gameObject);
+	}
+
+	public void RaiseGoText()
+	{
+		StartCoroutine (GoTextCoroutine ());
 	}
 
 	#endregion

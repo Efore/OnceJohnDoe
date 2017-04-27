@@ -114,6 +114,7 @@ public class SpawnEnemiesTrigger : EnhancedMonoBehaviour
 	private void FightOver()
 	{
 		StageManager.Singleton.SetOriginalRightLimit();
+		UIManager.Singleton.RaiseGoText ();
 		//gameObject.SetActive (false);
 	}
 
