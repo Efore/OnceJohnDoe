@@ -25,13 +25,13 @@ public class HitWaveBehaviour : EnhancedMonoBehaviour
 	#region Events
 
 	public delegate void WaveFinished();
-	public event WaveFinished WaveFinishedEvent;
+	public event WaveFinished WaveFinishedEvent; 
 
 	#endregion
 
 	#region MonoBehaviour calls
 
-	void OnEnable()
+	protected override void OnEnable() 
 	{
 		MaxScale = 1.5f;
 		StartCoroutine (ScaleCoroutine ());
