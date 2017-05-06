@@ -13,6 +13,9 @@ public class UIManager : MonoBehaviour
 	[SerializeField] private Transform _player2InfoPos = null;
 	[SerializeField] private Transform _bossInfoPos = null;
 
+	[SerializeField]
+	private GameObject _gameOverScreen = null;
+
 	[Header("GoText elements")]
 	[SerializeField] private AudioSource _audioSource = null;
 	[SerializeField] private GameObject _goText = null;
@@ -106,6 +109,12 @@ public class UIManager : MonoBehaviour
 		StartCoroutine (GoTextCoroutine ());
 	}
 
+	public void RaiseGameOverScreen()
+	{
+		player1Info.gameObject.SetActive (false);
+		CharacterManager.Singleton.LockEveryoneInput (true);
+		_gameOverScreen.SetActive (true);
+	}
 	#endregion
 
 

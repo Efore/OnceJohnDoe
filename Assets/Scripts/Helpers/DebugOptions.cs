@@ -22,6 +22,9 @@ public class DebugOptions : MonoBehaviour
 	[SerializeField]
 	private KeyCode _keyForMovingToBossPosition;
 
+	[SerializeField]
+	private KeyCode _keyForDyingInstantly;
+
 	#endregion
 
 	#region Public members
@@ -50,6 +53,9 @@ public class DebugOptions : MonoBehaviour
 		
 		if (Input.GetKeyDown (_keyForMovingToBossPosition))
 			CharacterManager.Singleton.GetPlayer (0).gameObject.transform.position = _startBossPosition.position;
+
+		if (Input.GetKeyDown (_keyForDyingInstantly))
+			CharacterManager.Singleton.GetPlayer (Constants.PLAYER_ONE).CharacterHit.GetHit(null,3,Constants.Vector2.right,10000.0f);
 	}
 	#endregion
 

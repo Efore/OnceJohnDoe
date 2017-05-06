@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(CameraSpecialEffect))]
 public class CameraManager : EnhancedMonoBehaviour
 {
 	#region Singleton
@@ -37,6 +38,11 @@ public class CameraManager : EnhancedMonoBehaviour
 
 	#region Properties
 
+	public CameraSpecialEffect CameraSpecialEffect
+	{
+		get { return _cameraSpecialEffect; }
+	}
+
 	#endregion
 
 	#region Events
@@ -70,7 +76,9 @@ public class CameraManager : EnhancedMonoBehaviour
 			return;
 		
 		float prevX = TransformRef.position.x;
-		TransformRef.position = _playerToFollow.TransformRef.position + (Vector3.back) * 10;
+		if(_playerToFollow != null)
+			TransformRef.position = _playerToFollow.TransformRef.position + (Vector3.back) * 10;
+		
 		CorrectCameraPosition();
 
 		float diffX = TransformRef.position.x - prevX;	

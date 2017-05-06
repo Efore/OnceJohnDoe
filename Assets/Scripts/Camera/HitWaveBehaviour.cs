@@ -14,11 +14,7 @@ public class HitWaveBehaviour : EnhancedMonoBehaviour
 
 	#region Properties
 
-	public float MaxScale
-	{
-		get;
-		set;
-	}
+	public float MaxScale = 1.5f;
 
 	#endregion
 
@@ -33,7 +29,6 @@ public class HitWaveBehaviour : EnhancedMonoBehaviour
 
 	protected override void OnEnable() 
 	{
-		MaxScale = 1.5f;
 		StartCoroutine (ScaleCoroutine ());
 	}
 

@@ -61,6 +61,7 @@ public class GameManager : MonoBehaviour
 	{
 		_instance = this;
 		DontDestroyOnLoad (this.gameObject);
+		ResetGame ();
 	}
 
 	#endregion
@@ -157,6 +158,11 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
+	public void LoadScene(int sceneIndex)
+	{
+		SceneManager.LoadScene (sceneIndex);
+	}
+
 	public void LoadScene(string sceneName)
 	{
 		SceneManager.LoadScene (sceneName,LoadSceneMode.Single);
@@ -171,6 +177,10 @@ public class GameManager : MonoBehaviour
 		StartCoroutine (PreloadSceneCoroutine (sceneName));
 	}
 
+	public void ResetGame()
+	{
+		LoadScene (1);
+	}
 	#endregion
 
 }

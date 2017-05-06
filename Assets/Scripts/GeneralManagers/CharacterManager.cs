@@ -128,10 +128,18 @@ public class CharacterManager : MonoBehaviour
 
 	public void LockPlayersInput(bool locked)
 	{
-		CharacterManager.Singleton.GetPlayer (Constants.PLAYER_ONE).CharacterInput.LockInput = locked;
+		if(CharacterManager.Singleton.GetPlayer (Constants.PLAYER_ONE) != null)
+			CharacterManager.Singleton.GetPlayer (Constants.PLAYER_ONE).CharacterInput.LockInput = locked;
 		if(CharacterManager.Singleton.GetPlayer (Constants.PLAYER_TWO) != null)
 			CharacterManager.Singleton.GetPlayer (Constants.PLAYER_TWO).CharacterInput.LockInput = locked;
 	}
+
+	public void LockEveryoneInput(bool locked)
+	{
+		foreach (CharacterInput characterInput in FindObjectsOfType<CharacterInput>())
+			characterInput.LockInput = true;		
+	}
+
 	#endregion
 
 

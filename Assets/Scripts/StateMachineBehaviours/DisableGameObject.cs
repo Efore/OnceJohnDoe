@@ -7,6 +7,10 @@ public class DisableGameObject : StateMachineBehaviour {
 
 	 // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
 	override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {	
+
+		if (animator.gameObject.tag == Tags.PLAYER)
+			UIManager.Singleton.RaiseGameOverScreen ();
+
 		if (animator.gameObject != null)
 		{	
 			animator.gameObject.SendMessage ("RaiseCharacterDissapearsEvent", SendMessageOptions.DontRequireReceiver);
