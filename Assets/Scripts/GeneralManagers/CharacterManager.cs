@@ -137,7 +137,7 @@ public class CharacterManager : MonoBehaviour
 	public void LockEveryoneInput(bool locked)
 	{
 		foreach (CharacterInput characterInput in FindObjectsOfType<CharacterInput>())
-			characterInput.LockInput = true;		
+			characterInput.LockInput = locked;		
 	}
 
 	#endregion

@@ -22,10 +22,7 @@ public class GameOverScreen : MonoBehaviour
 	#region MonoBehaviour calls
 
 	void Awake()
-	{
-		CameraManager.Singleton.CameraSpecialEffect.FadeFinishedEvent += delegate {
-			GameManager.Singleton.ResetGame();
-		};
+	{		
 	}
 
 	#endregion
@@ -34,6 +31,9 @@ public class GameOverScreen : MonoBehaviour
 
 	private void GameOverScreenLoaded()
 	{
+		CameraManager.Singleton.CameraSpecialEffect.FadeFinishedEvent += delegate {
+			GameManager.Singleton.ResetGame();
+		};
 		CameraManager.Singleton.SpecialEffectFadeScreen (true, 1.0f);
 	}
 

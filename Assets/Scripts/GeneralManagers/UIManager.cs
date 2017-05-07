@@ -1,10 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+	public enum PauseScreenOptions
+	{
+		RESUME = 0,
+		QUIT = 1
+	}
+
 	#region Private members
 
 	private static UIManager _instance = null;
@@ -13,6 +19,7 @@ public class UIManager : MonoBehaviour
 	[SerializeField] private Transform _player2InfoPos = null;
 	[SerializeField] private Transform _bossInfoPos = null;
 
+	[Header("GameOver screen elements")]
 	[SerializeField]
 	private GameObject _gameOverScreen = null;
 
@@ -20,6 +27,15 @@ public class UIManager : MonoBehaviour
 	[SerializeField] private AudioSource _audioSource = null;
 	[SerializeField] private GameObject _goText = null;
 	[SerializeField] private AudioClip _goTextSound = null;
+
+	[Header("Pause screen elements")]
+	[SerializeField] private GameObject _pauseScreen = null;
+	[SerializeField] private AudioClip _swichPauseOptionSound = null;
+
+	private Outline[] _pauseScreenOptions = null;
+	private int _currentPauseScreenOption = 0;
+
+	private bool _gamePaused = false;
 
 	#endregion
 
@@ -47,6 +63,30 @@ public class UIManager : MonoBehaviour
 	void Awake()
 	{
 		_instance = this;
+		_pauseScreenOptions = _pauseScreen.transform.GetComponentsInChildren<Outline> ();
+	}
+
+	void Update()
+	{
+		if(Input.GetKeyDown(KeyCode.Escape))
+			PauseGame ();		
+
+		if(_gamePaused)
+		{
+			if(Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow) )
+			{
+				PrevPauseOption ();
+			}
+			if(Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow) )
+			{
+				NextPauseOption ();
+			}
+			if(Input.GetKeyDown(KeyCode.G) || Input.GetKeyDown(KeyCode.Return) )
+			{
+				SelectCurrentPauseOption ();
+			}
+		}
+
 	}
 	#endregion
 
@@ -66,6 +106,72 @@ public class UIManager : MonoBehaviour
 		}
 	}
 
+	private void PauseGame()
+	{
+		if (!_gamePaused)
+		{
+			_gamePaused = true;
+			TogglePlayerInfo (false);
+			CharacterManager.Singleton.LockEveryoneInput (true);
+			Time.timeScale = 0.0f;
+			_pauseScreen.SetActive (true);
+			_pauseScreenOptions [_currentPauseScreenOption].enabled = true;
+		}
+		else
+		{
+			_pauseScreenOptions [_currentPauseScreenOption].enabled = false;
+			_currentPauseScreenOption = 0;
+			_pauseScreen.SetActive (false);
+			TogglePlayerInfo (true);
+			CharacterManager.Singleton.LockEveryoneInput (false);
+			Time.timeScale = 1.0f;
+			_gamePaused = false;
+		}
+	}
+
+	private void NextPauseOption()
+	{
+		_audioSource.PlayOneShot (_swichPauseOptionSound);
+		_pauseScreenOptions [_currentPauseScreenOption].enabled = false;
+		_currentPauseScreenOption++;
+		if (_currentPauseScreenOption >= _pauseScreenOptions.Length)
+			_currentPauseScreenOption = 0;
+		_pauseScreenOptions [_currentPauseScreenOption].enabled = true;
+	}
+
+	private void PrevPauseOption()
+	{
+		_audioSource.PlayOneShot (_swichPauseOptionSound);
+		_pauseScreenOptions [_currentPauseScreenOption].enabled = false;
+		_currentPauseScreenOption--;
+		if (_currentPauseScreenOption < 0)
+			_currentPauseScreenOption = _pauseScreenOptions.Length - 1;
+		_pauseScreenOptions [_currentPauseScreenOption].enabled = true;
+	}
+
+	private void SelectCurrentPauseOption()
+	{
+		switch ((PauseScreenOptions)_currentPauseScreenOption)
+		{
+			case PauseScreenOptions.RESUME:
+				PauseGame ();
+			break;
+			case PauseScreenOptions.QUIT:
+				Time.timeScale = 1.0f;
+				CameraManager.Singleton.CameraSpecialEffect.FadeFinishedEvent += delegate {
+					GameManager.Singleton.ResetGame();
+				};
+				CameraManager.Singleton.SpecialEffectFadeScreen (true, 1.0f);
+			break;
+		}
+	}
+
+	private void TogglePlayerInfo(bool activate)
+	{
+		player1Info.gameObject.SetActive (activate);
+		if(player2Info != null)
+			player2Info.gameObject.SetActive (activate);
+	}
 	#endregion
 
 	#region Public methods
@@ -111,12 +217,14 @@ public class UIManager : MonoBehaviour
 
 	public void RaiseGameOverScreen()
 	{
-		player1Info.gameObject.SetActive (false);
+		TogglePlayerInfo (false);
 		CharacterManager.Singleton.LockEveryoneInput (true);
 		_gameOverScreen.SetActive (true);
 	}
+
 	#endregion
 
 
 
+	
 }
