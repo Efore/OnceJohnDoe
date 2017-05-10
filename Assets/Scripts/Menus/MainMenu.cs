@@ -21,6 +21,15 @@ public class MainMenu : MonoBehaviour
 	[SerializeField]
 	private float _maxTimeForRandomObjectSpawn = 3.0f;
 
+	[SerializeField]
+	private AudioSource _audioSource = null;
+
+	[SerializeField]
+	private AudioClip _music = null;
+
+	[SerializeField]
+	private AudioClip _lightSfx = null;
+
 	#endregion
 
 	#region Public members
@@ -87,6 +96,17 @@ public class MainMenu : MonoBehaviour
 		} while(true);
 	}
 
+	private void PlayLightSfx()
+	{
+		_audioSource.PlayOneShot (_lightSfx);
+	}
+
+	private void PlayMusic()
+	{
+		_audioSource.clip = _music;
+		_audioSource.Play ();
+		_audioSource.loop = true;
+	}
 
 	#endregion
 

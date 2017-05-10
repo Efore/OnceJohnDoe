@@ -99,7 +99,9 @@ public class CameraSpecialEffect : MonoBehaviour
 				CharacterManager.Singleton.LockPlayersInput (true);
 			do
 			{				
-				AudioListener.volume += alphaIncr;
+				AudioListener.volume -= alphaIncr;
+				if(AudioListener.volume < 0.0f)
+					AudioListener.volume = 0.0f;
 				alpha += alphaIncr;
 				_inUseMaterial.SetFloat("_Alpha",alpha);
 				yield return waitForSeconds;
@@ -110,7 +112,11 @@ public class CameraSpecialEffect : MonoBehaviour
 			do
 			{
 				if(muteSound)					
-					AudioListener.volume -= alphaIncr;
+				{
+					AudioListener.volume += alphaIncr;
+					if(AudioListener.volume > 1.0f)
+						AudioListener.volume = 1.0f;
+				}
 				alpha -= alphaIncr;
 				_inUseMaterial.SetFloat("_Alpha",alpha);				
 				yield return waitForSeconds;
