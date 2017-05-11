@@ -11,6 +11,8 @@ public class CharacterSelectionMember : MonoBehaviour
 	private GameObject _selected = null;
 	[SerializeField]
 	private GameObject _unselected = null;
+	[SerializeField]
+	private AudioSource _memberAudioSource = null;
 
 	#endregion
 
@@ -43,6 +45,9 @@ public class CharacterSelectionMember : MonoBehaviour
 		_stats.SetActive (selected);
 		_selected.SetActive (selected);
 		_unselected.SetActive (!selected);
+
+		if(_memberAudioSource != null)
+			_memberAudioSource.volume = selected ? 1.0f : 0.0f;
 	}
 
 	#endregion
