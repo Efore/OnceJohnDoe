@@ -75,6 +75,7 @@ public class DialogManager : MonoBehaviour
 
 	private IEnumerator ShowDialogCoroutine(DialogUnit dialog)
 	{
+		StageManager.Singleton.AudioSource.volume = 0.3f;
 		CharacterManager.Singleton.LockPlayersInput (true);
 		_uiDialogBackground.gameObject.SetActive (true);
 		_currentDialog = dialog;

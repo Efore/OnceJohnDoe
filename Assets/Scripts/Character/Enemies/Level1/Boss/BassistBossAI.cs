@@ -21,6 +21,7 @@ public class BassistBossAI : BossAI
 	private const float DISTANCE_TO_CHECK_IF_FALLING_DEST = 0.1f;
 
 	[SerializeField] private DialogUnit _dialogPreBattle = null;
+	[SerializeField] private AudioClip _bossMusic = null;
 
 	[Header ("Params for Special Attacks")]
 	[SerializeField]
@@ -308,6 +309,9 @@ public class BassistBossAI : BossAI
 		((BossIdentity)_characterIdentity).ActivateBoss ();
 		CreateSpeakers ();
 		_behaviourCoroutine = StartCoroutine (BassistBehaviorCoroutine ());
+		StageManager.Singleton.AudioSource.clip = _bossMusic;
+		StageManager.Singleton.AudioSource.volume = 1.0f;
+		StageManager.Singleton.AudioSource.Play ();
 	}
 
 	public void PlayVictoryScene()

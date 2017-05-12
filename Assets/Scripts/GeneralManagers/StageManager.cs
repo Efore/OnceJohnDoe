@@ -33,6 +33,8 @@ public class StageManager : MonoBehaviour
 	private Transform _leftLimit = null;
 	[SerializeField]
 	private Transform _rightLimit = null;
+	[SerializeField]
+	private AudioSource _audioSource = null;
 
 	public Transform player1SpawnPos = null;
 	public Transform player2SpawnPos = null;
@@ -67,6 +69,11 @@ public class StageManager : MonoBehaviour
 	public Transform RightLimit
 	{
 		get{ return _rightLimit; }
+	}
+
+	public AudioSource AudioSource
+	{
+		get { return _audioSource; }
 	}
 
 	#endregion
