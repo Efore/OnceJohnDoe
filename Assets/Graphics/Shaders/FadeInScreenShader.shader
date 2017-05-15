@@ -3,6 +3,8 @@
 	Properties
 	{
 		_MainTex ("Main Texture", 2D) = "black" {}
+		[MaterialToggle] _UseBlendingTex ("Use Blending Texture", Float) = 0
+		_BlendingTex("Blending Texture", 2D) = "black" {}
 		_Alpha ("Alpha Degree", Range(0.0,1.0)) = 0
 	}
 	SubShader
@@ -40,12 +42,17 @@
 			}
 			
 			sampler2D _MainTex;
+			sampler2D _BlendingTex;
+			bool _UseBlendingTex;
 			float _Alpha;
 
 			fixed4 frag (v2f i) : SV_Target
 			{
-				fixed4 col = tex2D(_MainTex, i.uv);
-				col = 0;
+				fixed4 col = 0;
+
+				if(_UseBlendingTex)
+					col = tex2D (_BlendingTex, i.uv);	
+						
 				col.a = _Alpha;
 				return col;
 			}

@@ -23,8 +23,7 @@ public class CameraSpecialEffect : MonoBehaviour
 	[SerializeField]private Material _fadeInMaterial = null;
 	[SerializeField]private Material _wavedScreenMaterial = null;
 	[SerializeField]private Material _waveAtHitMaterial = null;
-
-	private Material _inUseMaterial = null;
+	[SerializeField]private Material _inUseMaterial = null;
 
 	private Vector3 _preShakeCameraPos;
 
@@ -59,7 +58,7 @@ public class CameraSpecialEffect : MonoBehaviour
 
 	void Awake()
 	{
-		_inUseMaterial = _fadeInMaterial;
+		
 	}
 
 	void OnRenderImage(RenderTexture srcTexture, RenderTexture destTexture)
@@ -103,6 +102,8 @@ public class CameraSpecialEffect : MonoBehaviour
 				if(AudioListener.volume < 0.0f)
 					AudioListener.volume = 0.0f;
 				alpha += alphaIncr;
+				if(alpha > 1.0f)
+					alpha = 1.0f;
 				_inUseMaterial.SetFloat("_Alpha",alpha);
 				yield return waitForSeconds;
 			} while(alpha < 1.0f);
@@ -118,6 +119,8 @@ public class CameraSpecialEffect : MonoBehaviour
 						AudioListener.volume = 1.0f;
 				}
 				alpha -= alphaIncr;
+				if(alpha < 0.0f)
+					alpha = 0.0f;
 				_inUseMaterial.SetFloat("_Alpha",alpha);				
 				yield return waitForSeconds;
 			} while(alpha > 0.0f);
