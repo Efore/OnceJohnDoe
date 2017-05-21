@@ -6,13 +6,17 @@ public class UICharacterInfo : MonoBehaviour
 {
 	#region Private members
 
+	[Header("Character bar data")]
 	[SerializeField]private UnityEngine.UI.Image _characterFace = null;
 	[SerializeField]private UnityEngine.UI.Slider _healthBar = null;
 	[SerializeField]private UnityEngine.UI.Slider _mpBar = null;
 	[SerializeField]private GameObject _mpBarParticles = null;
 	[SerializeField]private Sprite _lowHealthFace = null;
 	[SerializeField]private Sprite _alternativeFace = null;
+
+	[Header("Scenes data")]
 	[SerializeField]private string _victorySceneName = "";
+	[SerializeField]private Texture _loadingScene = null;
 
 	private Sprite _regularFace = null;
 	private Sprite _currentFace = null;
@@ -30,6 +34,11 @@ public class UICharacterInfo : MonoBehaviour
 	public string VictorySceneName
 	{
 		get { return _victorySceneName; }
+	}
+
+	public Texture LoadingScene
+	{
+		get { return _loadingScene; } 
 	}
 
 	#endregion

@@ -51,8 +51,11 @@
 				fixed4 col = 0;
 
 				if(_UseBlendingTex)
-					col = tex2D (_BlendingTex, i.uv);	
-						
+				{
+					float2 temp = i.uv;
+					temp.y = 1 - temp.y;
+					col = tex2D (_BlendingTex, temp);	
+				}		
 				col.a = _Alpha;
 				return col;
 			}

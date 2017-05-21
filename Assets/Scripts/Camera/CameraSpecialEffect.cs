@@ -29,9 +29,12 @@ public class CameraSpecialEffect : MonoBehaviour
 
 	private List<HitWaveBehaviour> _hitWaveRings = new List<HitWaveBehaviour>();
 
+	private Material _loadingMat = null;
+
 	#endregion
 
 	#region Public members
+
 
 
 
@@ -57,8 +60,12 @@ public class CameraSpecialEffect : MonoBehaviour
 	#region MonoBehaviour calls
 
 	void Awake()
-	{
-		
+	{		
+		if (GameManager.Singleton.player1CharacterPrefab != null && _inUseMaterial != null)
+		{
+			Texture loadingScene = GameManager.Singleton.player1CharacterPrefab.GetComponent<PlayerIdentity> ().CharacterUiInfo.GetComponent<UICharacterInfo> ().LoadingScene;
+			_inUseMaterial.SetTexture ("_BlendingTex", loadingScene);
+		}
 	}
 
 	void OnRenderImage(RenderTexture srcTexture, RenderTexture destTexture)

@@ -85,10 +85,6 @@ public class BassistBossAI : BossAI
 	protected override void Awake ()
 	{
 		base.Awake ();
-
-		_characterIdentity.CharacterHit.CharacterGetsHitEvent += delegate {
-			PlayVictoryScene();
-		};
 		_characterIdentity.CharacterHit.HealthChangeEvent += ChangeMaxTimeBetweenSpecials;
 		DialogManager.Singleton.CurrentDialogEndedEvent += DialogEndedCallback;
 	}
@@ -281,6 +277,9 @@ public class BassistBossAI : BossAI
 
 	private void ChangeMaxTimeBetweenSpecials (float relativeHealth)
 	{
+		if (relativeHealth <= 0.0f)
+			PlayVictoryScene ();
+		
 		_lastRelativeHealth = relativeHealth;
 		float max = _maxTimeBetweenSpecials / relativeHealth;
 		_maxTimeBetweenSpecials = max * relativeHealth;
