@@ -107,8 +107,6 @@ public class CharacterSelectionManager : MonoBehaviour
 			GameManager.Singleton.player1CharacterPrefab = _currentSelectedCharacter.inGamePrefab;
 			CameraSpecialEffect fadeInEffect = Camera.main.GetComponent<CameraSpecialEffect> ();
 			fadeInEffect.FadeFinishedEvent += delegate {
-//				_loadingScreenGameObject.SetActive(true);
-//				fadeInEffect.enabled = false;
 				GameManager.Singleton.LoadScene ("level1");	
 			};
 			_audioSource.PlayOneShot (_selectCharacterSound);

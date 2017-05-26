@@ -51,7 +51,7 @@ public class  PlayerIdentity : CharacterIdentity
 	{	
 		if (CharacterManager.Singleton != null)
 			CharacterManager.Singleton.LockPlayersInput (true);
-		yield return new WaitForSeconds(2.0f);
+		yield return new WaitForSeconds(8.0f);
 		CameraManager.Singleton.SpecialEffectFadeScreen(false);
 	}
 	#endregion

@@ -69,7 +69,7 @@ public class GameManager : MonoBehaviour
 	#region Private methods
 
 	private IEnumerator PreloadSceneCoroutine(string sceneName)
-	{
+	{	
 		_asyncOp = SceneManager.LoadSceneAsync (sceneName);
 		_asyncOp.allowSceneActivation = false;
 		yield return _asyncOp;
