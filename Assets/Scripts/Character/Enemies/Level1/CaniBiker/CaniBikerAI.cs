@@ -88,7 +88,7 @@ public class CaniBikerAI : EnemyAI
 
 	}
 
-	private void StartFalling(CharacterIdentity attacker, bool bigHit)
+	private void StartFalling(CharacterIdentity attacker, int hitNum)
 	{
 		_posStopFalling = TransformRef.position + (Utils.Singleton.Vector2ToVector3(_characterIdentity.CharacterMovement.Movement.normalized) * 4);
 		_characterIdentity.CharacterHit.enabled = false;

@@ -13,7 +13,9 @@ public class DialogUnit : MonoBehaviour
 	#region Public members
 
 	public Sprite backgroundSprite = null;
+	public bool playerIsSpeaker1 = true;
 	public Sprite speaker1Sprite = null;
+	public bool playerIsSpeaker2 = false;
 	public Sprite speaker2Sprite = null;
 	public float timeToShowText = 3.0f;
 

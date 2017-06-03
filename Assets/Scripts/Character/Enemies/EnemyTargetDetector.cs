@@ -83,9 +83,9 @@ public class EnemyTargetDetector : EnhancedMonoBehaviour
 
 	#region Private methods
 
-	private void CharacterGetsHitCallback (CharacterIdentity attacker, bool bigHit)
+	private void CharacterGetsHitCallback (CharacterIdentity attacker, int numHit)
 	{
-		if(bigHit)
+		if(numHit == 3)
 		{
 			_detectedTarget = null;
 			_enemyAIController.SetTargetInRangeOfAttack(null);

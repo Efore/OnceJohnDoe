@@ -101,8 +101,6 @@ public class CameraSpecialEffect : MonoBehaviour
 
 		if (fadeIn)
 		{	
-			if(CharacterManager.Singleton != null)
-				CharacterManager.Singleton.LockPlayersInput (true);
 			do
 			{				
 				AudioListener.volume -= alphaIncr;
@@ -132,8 +130,6 @@ public class CameraSpecialEffect : MonoBehaviour
 				yield return waitForSeconds;
 			} while(alpha > 0.0f);
 			this.enabled = false;
-			if(CharacterManager.Singleton != null)
-				CharacterManager.Singleton.LockPlayersInput (false);
 		}
 		if (FadeFinishedEvent != null)
 			FadeFinishedEvent ();

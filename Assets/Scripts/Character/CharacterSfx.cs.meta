@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 43f99a298c3bf444790f8ec3dcb97374
+timeCreated: 1496505043
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - _sfxAudioSource: {instanceID: 0}
+  - _smallHitVoice: {fileID: 8300000, guid: ffea92e0fd32f6442917c9ae0b6c1749, type: 3}
+  - _bigHitVoice: {fileID: 8300000, guid: 0f91a7bd17baf0c4bb3d4a18cd7059d8, type: 3}
+  - _deathVoice: {fileID: 8300000, guid: fddb8cb371cc6e44abb87cc3608bd74d, type: 3}
+  - _voiceAudioSource: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

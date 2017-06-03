@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using System.Collections;
 
 public class UICharacterInfo : MonoBehaviour
@@ -7,9 +7,9 @@ public class UICharacterInfo : MonoBehaviour
 	#region Private members
 
 	[Header("Character bar data")]
-	[SerializeField]private UnityEngine.UI.Image _characterFace = null;
-	[SerializeField]private UnityEngine.UI.Slider _healthBar = null;
-	[SerializeField]private UnityEngine.UI.Slider _mpBar = null;
+	[SerializeField]private Image _characterFace = null;
+	[SerializeField]private Slider _healthBar = null;
+	[SerializeField]private Slider _mpBar = null;
 	[SerializeField]private GameObject _mpBarParticles = null;
 	[SerializeField]private Sprite _lowHealthFace = null;
 	[SerializeField]private Sprite _alternativeFace = null;
@@ -39,6 +39,11 @@ public class UICharacterInfo : MonoBehaviour
 	public Texture LoadingScene
 	{
 		get { return _loadingScene; } 
+	}
+
+	public Sprite CurrentFace
+	{
+		get { return _currentFace; }
 	}
 
 	#endregion

@@ -17,6 +17,8 @@ public class DialogManager : MonoBehaviour
 	#endregion
 
 	#region Private members
+	[SerializeField]
+	private DialogUnit _firstDialog = null;
 
 	[Header("UI Manager references")]
 	[SerializeField]
@@ -59,6 +61,16 @@ public class DialogManager : MonoBehaviour
 		_instance = this;
 	}
 
+	void Start()
+	{
+		if (CameraManager.Singleton != null)
+		{
+			CameraManager.Singleton.CameraSpecialEffect.FadeFinishedEvent += delegate() {
+				ShowDialog (_firstDialog);
+			};
+		}
+	}
+
 	void Update()
 	{
 		if (_currentDialog != null && !_skipingText)
@@ -75,10 +87,14 @@ public class DialogManager : MonoBehaviour
 
 	private IEnumerator ShowDialogCoroutine(DialogUnit dialog)
 	{
-		StageManager.Singleton.AudioSource.volume = 0.3f;
-		CharacterManager.Singleton.LockPlayersInput (true);
+		if(StageManager.Singleton != null)
+			StageManager.Singleton.AudioSource.volume = 0.3f;
+		if(CharacterManager.Singleton != null)
+			CharacterManager.Singleton.LockPlayersInput (true);
+		
 		_uiDialogBackground.gameObject.SetActive (true);
 		_currentDialog = dialog;
+
 		for (_textIterator = 0; _textIterator < dialog.Texts.Length; ++_textIterator)
 		{
 			_skipingText = false;
@@ -87,8 +103,8 @@ public class DialogManager : MonoBehaviour
 
 			int speaker = dialog.Texts [_textIterator].speaker;
 
-			_uiSpeaker1Image.sprite = dialog.speaker1Sprite;
-			_uiSpeaker2Image.sprite = dialog.speaker2Sprite;
+			_uiSpeaker1Image.sprite = dialog.playerIsSpeaker1 ? UIManager.Singleton.player1Info.CurrentFace : dialog.speaker1Sprite;
+			_uiSpeaker2Image.sprite = dialog.playerIsSpeaker2 ? UIManager.Singleton.player1Info.CurrentFace : dialog.speaker2Sprite;
 
 			if (speaker == 1)
 			{
@@ -125,7 +141,8 @@ public class DialogManager : MonoBehaviour
 		
 		Clean ();
 
-		CharacterManager.Singleton.LockPlayersInput (false);
+		if(CharacterManager.Singleton != null)
+			CharacterManager.Singleton.LockPlayersInput (false);
 	}
 
 	private void Clean()

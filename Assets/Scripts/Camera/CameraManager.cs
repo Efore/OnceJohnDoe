@@ -99,9 +99,9 @@ public class CameraManager : EnhancedMonoBehaviour
 
 	#region Private methods
 
-	private void RaiseShake(CharacterIdentity attacker, bool bigHit)
+	private void RaiseShake(CharacterIdentity attacker, int hitNum)
 	{
-		if (bigHit)
+		if (hitNum == 3)
 			return;
 		
 		_cameraSpecialEffect.SpecialEffectShake (TransformRef);

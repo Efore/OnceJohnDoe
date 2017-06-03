@@ -34,7 +34,7 @@ public class CharacterHit : CharacterComponent {
 	#endif
 	#endregion
 
-	public delegate void CharacterGetsHit(CharacterIdentity attacker, bool bigHit);
+	public delegate void CharacterGetsHit(CharacterIdentity attacker, int hitNum);
 	public event CharacterGetsHit CharacterGetsHitEvent;
 	public delegate void CharacterDies();
 	public event CharacterDies CharacterDiesEvent;
@@ -156,15 +156,6 @@ public class CharacterHit : CharacterComponent {
 		ObjectPoolManager.Singleton.Instantiate(original,_fxHitParticlePosition.position,Constants.Quaternion.identity);
 	}
 
-	private void RaiseHitSound()
-	{
-		SFXManager.Singleton.PlayHitSound (_audioSource);
-	}
-
-	private void RaiseHitGroundSound()
-	{
-		SFXManager.Singleton.PlayHitTheGroundSound (_audioSource);
-	}
 	#endregion
 
 	#region Public methods
@@ -237,11 +228,10 @@ public class CharacterHit : CharacterComponent {
 			_characterIdentity.CharacterAnimation.SetAnimationInt("HitBack",hitNum);
 
 		CreateFxHitParticle(bigHit);
-		RaiseHitSound();
 
 		#endif
 		if(CharacterGetsHitEvent != null)
-			CharacterGetsHitEvent(attacker,bigHit);
+			CharacterGetsHitEvent(attacker,hitNum);
 	}
 
 	public void RaiseCharacterDefeatedEvent()

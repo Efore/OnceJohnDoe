@@ -174,9 +174,9 @@ public class ChopoSpecialAttack : PlayerSpecialAttack
 		RecoverMetalPoint (10.0f);
 	}
 
-	private void RecoverMPByGettingHit (CharacterIdentity attacker, bool bigHit)
+	private void RecoverMPByGettingHit (CharacterIdentity attacker, int hitNum)
 	{
-		float multiplicator = bigHit ? 10.0f : 5.0f;
+		float multiplicator = hitNum == 3 ? 10.0f : 5.0f;
 		RecoverMetalPoint (multiplicator);
 	}
 
