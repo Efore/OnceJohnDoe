@@ -49,6 +49,12 @@ public class DialogUnit : MonoBehaviour
 
 	#region Public methods
 
+	public void StartThisDialog()
+	{
+		DialogManager.Singleton.ShowDialog (this);
+	}
+
+
 	#endregion
 
 }	

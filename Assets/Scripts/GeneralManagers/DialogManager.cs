@@ -141,6 +141,8 @@ public class DialogManager : MonoBehaviour
 		
 		Clean ();
 
+		if(StageManager.Singleton != null)
+			StageManager.Singleton.AudioSource.volume = 1.0f;
 		if(CharacterManager.Singleton != null)
 			CharacterManager.Singleton.LockPlayersInput (false);
 	}
@@ -162,7 +164,8 @@ public class DialogManager : MonoBehaviour
 
 	public void ShowDialog(DialogUnit dialog)
 	{
-		StartCoroutine (ShowDialogCoroutine (dialog));
+		if(dialog != null)
+			StartCoroutine (ShowDialogCoroutine (dialog));
 	}
 
 	#endregion

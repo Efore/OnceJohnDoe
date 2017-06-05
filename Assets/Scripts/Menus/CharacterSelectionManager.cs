@@ -29,6 +29,7 @@ public class CharacterSelectionManager : MonoBehaviour
 	private int _currentSelectedCharacterIndex = 0;
 	private int _currentPlayerSelecting = 0;
 
+	private bool _charSelected = false;
 	#endregion
 
 	#region Public members
@@ -62,7 +63,7 @@ public class CharacterSelectionManager : MonoBehaviour
 
 	void Update()
 	{
-		if (_currentPlayerSelecting == Constants.PLAYER_ONE)
+		if (_currentPlayerSelecting == Constants.PLAYER_ONE && !_charSelected)
 		{
 			if (Input.GetKeyDown (KeyCode.A))
 				PreviousCharacter ();
@@ -104,16 +105,15 @@ public class CharacterSelectionManager : MonoBehaviour
 	{
 		if (_currentSelectedCharacter.inGamePrefab != null)
 		{
+			_charSelected = true;
 			GameManager.Singleton.player1CharacterPrefab = _currentSelectedCharacter.inGamePrefab;
 			CameraSpecialEffect fadeInEffect = Camera.main.GetComponent<CameraSpecialEffect> ();
 			fadeInEffect.FadeFinishedEvent += delegate {
-				GameManager.Singleton.LoadScene ("level1");	
+				GameManager.Singleton.LoadScene (GameManager.SceneIndexes.Level1);	
 			};
 			_audioSource.PlayOneShot (_selectCharacterSound);
 			fadeInEffect.SpecialEffectFadeScreen (true, 0.75f);
 		}
-		else
-			Debug.Log ("Character locked");
 	}
 
 	#endregion

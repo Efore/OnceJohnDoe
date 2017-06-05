@@ -6,11 +6,12 @@ public class ChopoSpecialAttack : PlayerSpecialAttack
 	#region Private members
 
 	[Header("Chopo params")]
+	[SerializeField] protected AudioSource _audioSource = null;
 	[SerializeField] protected float _metalPointRecoveringBase = 1.0f;
 	[Header("Special Attack 1 params")]
 	[SerializeField]private RuntimeAnimatorController _superChopoAnimatorController = null;
 	[SerializeField]private GameObject _electricBallGameObject = null;
-
+	[SerializeField]private AudioClip _superChopoScream = null;
 	[SerializeField]private float _dmgMultiplicator = 2.0f;
 	[SerializeField]private float _durationSpecial1 = 10.0f;
 
@@ -19,6 +20,7 @@ public class ChopoSpecialAttack : PlayerSpecialAttack
 	[SerializeField]private int _numberOfTargets = 5;
 	[SerializeField]private float _secondsPerEnemy = 0.75f;
 	[SerializeField]private ParticleSystem _electricBoltParticle = null;
+	[SerializeField]private AudioClip _boltSfx = null;
 
 	private RuntimeAnimatorController _chopoAnimatorController = null;
 	private Animator _animator = null;
@@ -99,6 +101,12 @@ public class ChopoSpecialAttack : PlayerSpecialAttack
 		}
 	}
 
+	protected override void PerformSpecialAttack1 ()
+	{
+		base.PerformSpecialAttack1 ();
+		_audioSource.PlayOneShot (_superChopoScream);
+	}
+
 	protected override void StartSpecialAttack1Effect ()
 	{
 		base.StartSpecialAttack1Effect ();
@@ -157,6 +165,7 @@ public class ChopoSpecialAttack : PlayerSpecialAttack
 
 		_electricBoltParticle.transform.position = enemy.TransformRef.position;
 		_electricBoltParticle.Play (true);
+		_audioSource.PlayOneShot (_boltSfx);
 
 		Vector2 headingDirection = enemy.TransformRef.position.x < TransformRef.position.x ? Constants.Vector2.left :
 			Constants.Vector2.right;

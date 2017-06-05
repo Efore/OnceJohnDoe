@@ -15,7 +15,7 @@ public class UICharacterInfo : MonoBehaviour
 	[SerializeField]private Sprite _alternativeFace = null;
 
 	[Header("Scenes data")]
-	[SerializeField]private string _victorySceneName = "";
+	[SerializeField]private GameManager.SceneIndexes _victoryScene;
 	[SerializeField]private Texture _loadingScene = null;
 
 	private Sprite _regularFace = null;
@@ -31,9 +31,9 @@ public class UICharacterInfo : MonoBehaviour
 
 	#region Properties
 
-	public string VictorySceneName
+	public GameManager.SceneIndexes VictoryScene
 	{
-		get { return _victorySceneName; }
+		get { return _victoryScene; }
 	}
 
 	public Texture LoadingScene
@@ -61,8 +61,8 @@ public class UICharacterInfo : MonoBehaviour
 
 	void Start()
 	{
-		if(_victorySceneName != "")
-			GameManager.Singleton.PreloadScene (_victorySceneName);
+		if(_victoryScene != GameManager.SceneIndexes.Null)
+			GameManager.Singleton.PreloadScene (_victoryScene);
 	}
 
 	#endregion

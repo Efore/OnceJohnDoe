@@ -37,19 +37,23 @@ public class CharacterSfx : CharacterComponent
 	protected override void Start ()
 	{
 		base.Start ();
-		_characterIdentity.CharacterHit.CharacterDefeatedEvent += delegate() {
-			_voiceAudioSource.PlayOneShot(_deathVoice);
-		};
-		_characterIdentity.CharacterHit.CharacterGetsHitEvent += delegate(CharacterIdentity attacker, int hitNum) {
-			AudioClip voice = null;
+
+		_characterIdentity.CharacterHit.CharacterGetsHitEvent += delegate(CharacterIdentity attacker, int hitNum) {		
 
 			SFXManager.Singleton.PlayHitSound(_sfxAudioSource);
 
-			if(hitNum == 2)
-				voice = _smallHitVoice;
-			else if(hitNum == 3)
-				voice = _bigHitVoice;
+			AudioClip voice = null;
 
+			if(_characterIdentity.CharacterHit.CurrentHealth > 0.0f)
+			{	
+				if(hitNum == 2)
+					voice = _smallHitVoice;
+				else if(hitNum == 3)
+					voice = _bigHitVoice;
+			}
+			else
+				voice = _deathVoice;
+			
 			if(voice != null)
 				_voiceAudioSource.PlayOneShot(voice);
 		};

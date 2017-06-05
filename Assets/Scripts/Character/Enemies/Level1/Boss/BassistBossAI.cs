@@ -44,12 +44,17 @@ public class BassistBossAI : BossAI
 	private Transform _leftSpeakersPosition = null;
 	[SerializeField]
 	private GameObject _speakersPrefab = null;
+	[SerializeField]
+	private AudioClip[] _bassNotes = null;
+	[SerializeField]
+	private AudioClip _bassChord = null;
 
 	private GameObject _rightSpeakers = null;
 	private GameObject _leftSpeakers = null;
 
 	private SpecialAttack _currentSpecialAttack = SpecialAttack.CHORD;
 	private List<Transform> _originsToUse = new List<Transform> ();
+	private List<AudioClip> _notesToUse = new List<AudioClip> ();
 
 	private Side _currentSide = Side.RIGHT;
 	private Vector3 _posAfterRoll = Constants.Vector3.zero;
@@ -181,7 +186,9 @@ public class BassistBossAI : BossAI
 				num = Random.Range (_maxNumOfSoundwavesPlucking / 2, _maxNumOfSoundwavesPlucking);
 				for (int i = 0; i < num; ++i)
 				{
-					_originsToUse.Add (projectileOrigins [Random.Range(0,4)]);
+					int random = Random.Range (0, 4);
+					_originsToUse.Add (projectileOrigins [random]);
+					_notesToUse.Add (_bassNotes [random]);
 				}
 
 				break;
@@ -241,9 +248,12 @@ public class BassistBossAI : BossAI
 		{
 			case SpecialAttack.PLUCK:
 				CreateProjectile (_originsToUse [0]);
+				_originsToUse [0].parent.GetComponent<AudioSource> ().PlayOneShot (_notesToUse [0]);
+				_notesToUse.RemoveAt (0);
 				_originsToUse.RemoveAt (0);
 				if(_originsToUse.Count == 0)
 					_characterIdentity.CharacterAnimation.SetAnimationTrigger("SpecialAttack1");		
+
 				break;
 
 			case SpecialAttack.CHORD:
@@ -251,6 +261,7 @@ public class BassistBossAI : BossAI
 				{
 					CreateProjectile (_originsToUse [i]);
 				}
+				_originsToUse [0].parent.GetComponent<AudioSource> ().PlayOneShot (_bassChord);
 				_originsToUse.Clear ();
 				break;
 		}
@@ -315,7 +326,7 @@ public class BassistBossAI : BossAI
 
 	public void PlayVictoryScene()
 	{
-		GameManager.Singleton.LoadScene (UIManager.Singleton.player1Info.VictorySceneName);
+		GameManager.Singleton.LoadScene (UIManager.Singleton.player1Info.VictoryScene);
 	}
 
 	#endregion

@@ -5,6 +5,17 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+	public enum SceneIndexes
+	{
+		Null = -1,
+		InitialScene = 0,
+		Intro = 1,
+		CharSelection = 2,
+		Level1 = 3,
+		VictoryChopo = 4,
+		VictoryDani = 5
+	}
+
 	#region Singleton
 
 	private static GameManager _instance = null;
@@ -68,9 +79,9 @@ public class GameManager : MonoBehaviour
 
 	#region Private methods
 
-	private IEnumerator PreloadSceneCoroutine(string sceneName)
+	private IEnumerator PreloadSceneCoroutine(SceneIndexes sceneIndex)
 	{	
-		_asyncOp = SceneManager.LoadSceneAsync (sceneName);
+		_asyncOp = SceneManager.LoadSceneAsync ((int)sceneIndex);
 		_asyncOp.allowSceneActivation = false;
 		yield return _asyncOp;
 	}
@@ -83,7 +94,7 @@ public class GameManager : MonoBehaviour
 
 		if (player1lives > 0)
 		{
-			ObjectPoolManager.Singleton.Instantiate (FxManager.Singleton.fxSpawningThunder, _player1Character.TransformRef.position, Quaternion.identity);
+			Instantiate (FxManager.Singleton.fxSpawningThunder, _player1Character.TransformRef.position, Quaternion.identity);
 
 			_player1Character.PlayerSpecialAttack.PushAwayEnemies ();
 			_player1Character.CharacterHit.RespawnCharacter ();
@@ -106,7 +117,7 @@ public class GameManager : MonoBehaviour
 		UIManager.Singleton.player2Info.livesText.text = "X " + player2lives;
 		if (player2lives > 0)
 		{
-			ObjectPoolManager.Singleton.Instantiate (FxManager.Singleton.fxSpawningThunder, _player2Character.TransformRef.position, Quaternion.identity);
+			Instantiate (FxManager.Singleton.fxSpawningThunder, _player2Character.TransformRef.position, Quaternion.identity);
 
 			_player2Character.PlayerSpecialAttack.PushAwayEnemies ();
 			_player2Character.CharacterHit.RespawnCharacter ();
@@ -158,29 +169,21 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-	public void LoadScene(int sceneIndex)
+	public void LoadScene(SceneIndexes sceneIndex)
 	{
-		SceneManager.LoadScene (sceneIndex);
+		SceneManager.LoadScene ((int)sceneIndex);
 	}
 
-	public void LoadScene(string sceneName)
-	{
-		SceneManager.LoadScene (sceneName,LoadSceneMode.Single);
-	}
-
-	public void PreloadScene(string sceneName)
-	{
-		if (_scenesPreloaded.Contains (sceneName))
-			return;
-
-		_scenesPreloaded.Add (sceneName);
-		StartCoroutine (PreloadSceneCoroutine (sceneName));
+	public void PreloadScene(SceneIndexes sceneIndex)
+	{		
+		StartCoroutine (PreloadSceneCoroutine (sceneIndex));
 	}
 
 	public void ResetGame()
 	{
-		LoadScene (1);
+		LoadScene (SceneIndexes.Intro);
 	}
+
 	#endregion
 
 }

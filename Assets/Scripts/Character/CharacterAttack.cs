@@ -10,6 +10,8 @@ public class CharacterAttack : CharacterComponent {
 	public event ComboFinished ComboFinishedEvent;
 
 	#region Private members
+	[SerializeField]
+	private AudioClip _attackSound = null;
 
 	private bool _isAttackingAndRunning = false;
 	private bool _pendingAttack = false;
@@ -177,9 +179,9 @@ public class CharacterAttack : CharacterComponent {
 			CharacterAttacksCharacterEvent (victim);
 	}
 
-	public void PlayAttackSound(AudioClip clip)
+	public void PlayAttackSound()
 	{
-		_audioSource.PlayOneShot (clip);
+		_audioSource.PlayOneShot (_attackSound);
 	}
 	#endregion
 }
