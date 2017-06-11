@@ -119,7 +119,7 @@ public class CameraSpecialEffect : MonoBehaviour
 	private IEnumerator FadeCoroutine(bool fadeIn, float fadeTime, bool muteSound)
 	{
 		float alpha = _inUseMaterial.GetFloat ("_Alpha");
-		float alphaIncr = Time.deltaTime / fadeTime;
+		float alphaIncr = Time.unscaledDeltaTime / fadeTime;
 		WaitForEndOfFrame waitForFrame = new WaitForEndOfFrame();
 
 		if (fadeIn)

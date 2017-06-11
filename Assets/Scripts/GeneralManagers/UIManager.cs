@@ -157,11 +157,11 @@ public class UIManager : MonoBehaviour
 				PauseGame ();
 			break;
 			case PauseScreenOptions.QUIT:				
+				Time.timeScale = 1.0f;
 				CameraManager.Singleton.CameraSpecialEffect.FadeFinishedEvent += delegate {
 					GameManager.Singleton.ResetGame();
 				};
-				CameraManager.Singleton.SpecialEffectFadeScreen (true, 0.5f);
-				Time.timeScale = 1.0f;
+				CameraManager.Singleton.SpecialEffectFadeScreen (true, 0.5f);				
 			break;
 		}
 	}
