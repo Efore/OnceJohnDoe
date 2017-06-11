@@ -47,7 +47,7 @@ public class MainMenu : MonoBehaviour
 	#region MonoBehaviour calls
 
 	private void Start()
-	{
+	{		
 		StartCoroutine (LeftRightCoroutine ());
 		StartCoroutine (RightLeftCoroutine ());
 	}
@@ -65,7 +65,7 @@ public class MainMenu : MonoBehaviour
 	private IEnumerator GoToCharSelectionMenu()
 	{		
 		CameraSpecialEffect fadeInEffect = Camera.main.GetComponent<CameraSpecialEffect> ();
-		fadeInEffect.SpecialEffectFadeScreen (true);
+		fadeInEffect.SpecialEffectFadeScreen (true,0.5f);
 		yield return new WaitForSeconds (1.0f);
 		GameManager.Singleton.LoadScene (GameManager.SceneIndexes.CharSelection);
 	}

@@ -81,7 +81,7 @@ public class UIManager : MonoBehaviour
 			{
 				NextPauseOption ();
 			}
-			if(Input.GetKeyDown(KeyCode.G) || Input.GetKeyDown(KeyCode.Return) )
+			if(Input.GetKeyDown(KeyCode.G) || Input.GetKeyDown(KeyCode.H) || Input.GetKeyDown(KeyCode.J) ||Input.GetKeyDown(KeyCode.Return) )
 			{
 				SelectCurrentPauseOption ();
 			}
@@ -156,12 +156,12 @@ public class UIManager : MonoBehaviour
 			case PauseScreenOptions.RESUME:
 				PauseGame ();
 			break;
-			case PauseScreenOptions.QUIT:
-				Time.timeScale = 1.0f;
+			case PauseScreenOptions.QUIT:				
 				CameraManager.Singleton.CameraSpecialEffect.FadeFinishedEvent += delegate {
 					GameManager.Singleton.ResetGame();
 				};
-				CameraManager.Singleton.SpecialEffectFadeScreen (true, 1.0f);
+				CameraManager.Singleton.SpecialEffectFadeScreen (true, 0.5f);
+				Time.timeScale = 1.0f;
 			break;
 		}
 	}

@@ -58,7 +58,7 @@ public class CharacterSelectionManager : MonoBehaviour
 	void Start()
 	{
 		CameraSpecialEffect fadeInEffect = Camera.main.GetComponent<CameraSpecialEffect> ();
-		fadeInEffect.SpecialEffectFadeScreen (false);
+		fadeInEffect.SpecialEffectFadeScreen (false,1.0f);
 	}
 
 	void Update()
@@ -69,7 +69,7 @@ public class CharacterSelectionManager : MonoBehaviour
 				PreviousCharacter ();
 			if (Input.GetKeyDown (KeyCode.D))
 				NextCharacter ();
-			if (Input.GetKeyDown (KeyCode.G))
+			if(Input.GetKeyDown(KeyCode.G) || Input.GetKeyDown(KeyCode.H) || Input.GetKeyDown(KeyCode.J) ||Input.GetKeyDown(KeyCode.Return) )
 				SelectCharacter ();
 		}
 	}

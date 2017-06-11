@@ -1,8 +1,9 @@
-﻿Shader "Custom/FadeInScreenShader"
+﻿Shader "Custom/LoadingScreenShader"
 {
 	Properties
 	{
 		_MainTex ("Main Texture", 2D) = "black" {}
+		_BlendingTex("Blending Texture", 2D) = "black" {}
 		_Alpha ("Alpha Degree", Range(0.0,1.0)) = 0
 	}
 	SubShader
@@ -46,7 +47,12 @@
 
 			fixed4 frag (v2f i) : SV_Target
 			{
-				fixed4 col = 0;	
+				fixed4 col = 0;
+
+				float2 temp = i.uv;
+				temp.y = 1 - temp.y;
+				col = tex2D (_BlendingTex, temp);	
+						
 				col.a = _Alpha;
 				return col;
 			}

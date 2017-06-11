@@ -27,6 +27,8 @@ public class CameraManager : EnhancedMonoBehaviour
 	[SerializeField] private GameObject [] _bgsBack;
 	[SerializeField] private GameObject [] _bgsMiddle;
 
+	[Header("Camera special effects")]
+	[SerializeField]
 	private CameraSpecialEffect _cameraSpecialEffect = null;
 
 	#endregion
@@ -55,7 +57,6 @@ public class CameraManager : EnhancedMonoBehaviour
 	{
 		base.Awake ();
 		_instance = this;
-		_cameraSpecialEffect = GetComponent<CameraSpecialEffect> ();
 		_cameraBorders = GetComponentsInChildren<CameraBorder>();
 
 	}
