@@ -10,9 +10,7 @@ public class SpawnEnemiesTrigger : EnhancedMonoBehaviour
 		public int knapsackSize;
 		public StageManager.EnemyTier enemyTier;
 
-		[HideInInspector]
 		public List<StageManager.EnemyToSpawn> potentialEnemiesToSpawn = new List<StageManager.EnemyToSpawn>();
-		[HideInInspector]
 		public List<GameObject> enemiesToSpawn = new List<GameObject>();
 
 		public int enemiesToKill;
@@ -64,11 +62,13 @@ public class SpawnEnemiesTrigger : EnhancedMonoBehaviour
 	private IEnumerator SpawnEnemies(Wave wave, float secsBeforeSpawning = 0.0f)
 	{
 		yield return new WaitForSeconds (secsBeforeSpawning); 
-		for(int i = 0; i < wave.enemiesToKill; ++i)
+		for(int i = 0; i < wave.enemiesToSpawn.Count; ++i)
 		{
 			GameObject enemy = GameObject.Instantiate(wave.enemiesToSpawn[i],
 				_spawnPoints[i % _spawnPoints.Length].position, Quaternion.identity) as GameObject;
-			
+
+			enemy.transform.SetParent (this.TransformRef, true);
+
 			enemy.GetComponent<CharacterHit>().CharacterDiesEvent += EnemyKilled;
 
 			if (enemy.GetComponent<EnemyTameable> () != null)

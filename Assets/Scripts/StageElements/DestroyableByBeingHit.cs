@@ -31,7 +31,7 @@ public class DestroyableByBeingHit : EnhancedMonoBehaviour
 
 	void OnTriggerEnter (Collider other)
 	{
-		if (other.transform.root.GetComponent<CharacterHit> ().IsBeingHit)
+		if (other.transform.root.GetComponent<CharacterHit> ()!= null && other.transform.root.GetComponent<CharacterHit> ().IsBeingHit)
 		{
 			if (_animator != null)
 			{

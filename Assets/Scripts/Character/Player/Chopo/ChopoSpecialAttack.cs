@@ -26,6 +26,7 @@ public class ChopoSpecialAttack : PlayerSpecialAttack
 	private Animator _animator = null;
 	private SpriteRenderer _spriteRenderer = null;
 	private float _durationSpecial2 = 1.0f;
+	private bool _superChopoActive = false;
 
 
 	#endregion
@@ -110,6 +111,7 @@ public class ChopoSpecialAttack : PlayerSpecialAttack
 	protected override void StartSpecialAttack1Effect ()
 	{
 		base.StartSpecialAttack1Effect ();
+		_superChopoActive = true;
 		_characterIdentity.CharacterInput.LockInput = false;
 		_characterIdentity.CharacterHit.StandWith1hp = true;
 		_characterIdentity.CharacterHit.IsInvulnerable = false;
@@ -132,7 +134,7 @@ public class ChopoSpecialAttack : PlayerSpecialAttack
 		UIManager.Singleton.player1Info.ToogleAlternativeFace (false);
 		_animator.runtimeAnimatorController = _chopoAnimatorController;
 		_animator.Rebind();
-
+		_superChopoActive = false;
 	}
 
 	protected override void StartSpecialAttack2Effect ()
@@ -175,6 +177,8 @@ public class ChopoSpecialAttack : PlayerSpecialAttack
 
 	private void RecoverMetalPoint(float multiplicator)
 	{
+		if (_superChopoActive)
+			return;
 		CurrentMetalPoints += multiplicator * _metalPointRecoveringBase;
 	}
 
