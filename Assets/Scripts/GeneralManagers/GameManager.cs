@@ -13,7 +13,8 @@ public class GameManager : MonoBehaviour
 		CharSelection = 2,
 		Level1 = 3,
 		VictoryChopo = 4,
-		VictoryDani = 5
+		VictoryDani = 5,
+		Credits = 6
 	}
 
 	#region Singleton
