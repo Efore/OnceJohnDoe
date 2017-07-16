@@ -38,7 +38,7 @@ public class VictoryScreen : MonoBehaviour
 		};
 		_cameraSpecialEffect.FadeFinishedEvent += delegate() {
 			if(GameManager.Singleton != null)
-				GameManager.Singleton.LoadScene(GameManager.SceneIndexes.Intro);
+				GameManager.Singleton.LoadScene(GameManager.SceneIndexes.Credits);
 		};
 	}
 
