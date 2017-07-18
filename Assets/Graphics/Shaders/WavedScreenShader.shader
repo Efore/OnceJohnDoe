@@ -9,6 +9,8 @@
 		_WaveIndex("Wave Index", Range(0.0,1.57)) = 0
 		_WaveColor("Wave Color", Color) = (1,1,1,1)
 		_XPosOrigin("X Origin", Float) = 0.5
+		_VertsColor("Verts fill color", Range(0.0,1.0)) = 0
+		_VertsColor2("Verts fill color 2", Range(0.0,1.0)) = 0	
 	}
 	SubShader
 	{
@@ -35,6 +37,7 @@
 				float2 uv : TEXCOORD0;
 				float4 vertex : SV_POSITION;
 				float4 worldPos : TEXCOORD1;
+				float4 scr_pos  : TEXCOORD2;
 			};
 
 			v2f vert (appdata IN)
@@ -43,6 +46,7 @@
 				OUT.worldPos = IN.vertex;
 				OUT.vertex = mul(UNITY_MATRIX_MVP, OUT.worldPos);
 				OUT.uv = IN.uv;
+				OUT.scr_pos = ComputeScreenPos(OUT.vertex);
 				return OUT;
 			}
 					
@@ -53,6 +57,34 @@
 			float _WaveIndex;
 			fixed4 _WaveColor;
 			float _XPosOrigin;
+			uniform float _VertsColor;
+			uniform float _VertsColor2;
+
+			float4 ctrParam(v2f i)
+			{
+				float2 ps = i.scr_pos.xy *_ScreenParams.xy / i.scr_pos.w;
+
+				int pp = (int)ps.x % 3;
+				float4 muls = float4(0, 0, 0, 1);
+
+		        if (pp == 1) { 
+		        	muls.r = 1; 
+		        	muls.b = _VertsColor; 
+		        	muls.g = _VertsColor2; 
+	        	}
+				else if (pp == 2) { 
+					muls.r = _VertsColor; 
+					muls.g = 1; 
+					muls.b = _VertsColor2; 
+				}
+        		else { 
+        			muls.r = _VertsColor2; 
+        			muls.b = 1; 
+        			muls.g = _VertsColor; 
+        		}
+
+        		return muls;
+			}
 
 			fixed4 frag (v2f IN) : SV_Target
 			{
@@ -73,7 +105,7 @@
 				fixed4 c = tex2D(_MainTex,IN.uv + texOffset);
 				c *= fixed4(1,1,1,1) - _WaveColor;
 
-				return c;
+				return c * ctrParam(IN);
 			}
 			ENDCG
 		}

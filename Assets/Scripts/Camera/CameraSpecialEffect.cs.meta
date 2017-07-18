@@ -1,10 +1,17 @@
 fileFormatVersion: 2
 guid: d75ce4fe8d3d68646b83aa8773abaf6c
-timeCreated: 1487518265
+timeCreated: 1500413190
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - _hitWaveRingPrefab: {instanceID: 0}
+  - _waveAtHitCamera: {instanceID: 0}
+  - _ctrMaterial: {fileID: 2100000, guid: 7fe7808b4b6dc8844964dcd6e073afc6, type: 2}
+  - _fadeInMaterial: {instanceID: 0}
+  - _wavedScreenMaterial: {instanceID: 0}
+  - _waveAtHitMaterial: {instanceID: 0}
+  - _loadingMat: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

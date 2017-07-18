@@ -9,6 +9,8 @@ public class CameraSpecialEffect : MonoBehaviour
 	private const float SMALL_HIT_WAVE_SCALE = 2f;
 	private const float BIG_HIT_WAVE_SCALE = 3f;
 
+
+
 	[Header("Camera Shake params")]
 	[SerializeField]private float _cameraShakeRatio = 0.1f;
 	[SerializeField]private float _shakingTime = 0.3f;
@@ -22,6 +24,7 @@ public class CameraSpecialEffect : MonoBehaviour
 	[Header("Full Screen Shaders")]
 	[SerializeField]private bool _useLoadingScreen = false;
 	[SerializeField]private bool _startInBlack = false;
+	[SerializeField]private Material _ctrMaterial = null;
 	[SerializeField]private Material _fadeInMaterial = null;
 	[SerializeField]private Material _wavedScreenMaterial = null;
 	[SerializeField]private Material _waveAtHitMaterial = null;
@@ -72,7 +75,6 @@ public class CameraSpecialEffect : MonoBehaviour
 		if (_startInBlack)
 		{			
 			_useOnRenderImage = true;
-			_fadeInMaterialCopy.SetFloat ("_Alpha", 1.0f);
 			AudioListener.volume = 0.0f;
 			_inUseMaterial = _fadeInMaterialCopy;
 		}
@@ -91,9 +93,11 @@ public class CameraSpecialEffect : MonoBehaviour
 	}
 
 	void OnRenderImage(RenderTexture srcTexture, RenderTexture destTexture)
-	{	
+	{			
 		if(_useOnRenderImage)	
 			Graphics.Blit (srcTexture, destTexture, _inUseMaterial);
+		else
+			Graphics.Blit (srcTexture, destTexture, _ctrMaterial);
 	}
 
 	#endregion
@@ -125,6 +129,8 @@ public class CameraSpecialEffect : MonoBehaviour
 		if (fadeIn)
 		{	
 			_useOnRenderImage = true;
+			alpha = 0.0f;
+			_inUseMaterial.SetFloat("_Alpha",alpha);
 			do
 			{				
 				AudioListener.volume -= alphaIncr * Time.deltaTime;
@@ -139,15 +145,17 @@ public class CameraSpecialEffect : MonoBehaviour
 		}
 		else
 		{
+			alpha = 1.0f;
+			_inUseMaterial.SetFloat("_Alpha",0.0f);
 			do
 			{
 				if(muteSound)					
 				{
-					AudioListener.volume += alphaIncr * Time.deltaTime;;
+					AudioListener.volume += alphaIncr * Time.deltaTime;
 					if(AudioListener.volume > 1.0f)
 						AudioListener.volume = 1.0f;
 				}
-				alpha -= alphaIncr  * Time.deltaTime;
+				alpha -= alphaIncr * Time.deltaTime;
 				if(alpha < 0.0f)
 					alpha = 0.0f;
 				_inUseMaterial.SetFloat("_Alpha",alpha);				
