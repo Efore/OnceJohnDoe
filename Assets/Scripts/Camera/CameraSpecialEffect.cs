@@ -119,7 +119,7 @@ public class CameraSpecialEffect : MonoBehaviour
 	private IEnumerator FadeCoroutine(bool fadeIn, float fadeTime, bool muteSound)
 	{
 		float alpha = _inUseMaterial.GetFloat ("_Alpha");
-		float alphaIncr = Time.unscaledDeltaTime / fadeTime;
+		int alphaIncr = (int)(1.0f/ fadeTime);
 		WaitForEndOfFrame waitForFrame = new WaitForEndOfFrame();
 
 		if (fadeIn)
@@ -127,10 +127,10 @@ public class CameraSpecialEffect : MonoBehaviour
 			_useOnRenderImage = true;
 			do
 			{				
-				AudioListener.volume -= alphaIncr;
+				AudioListener.volume -= alphaIncr * Time.deltaTime;
 				if(AudioListener.volume < 0.0f)
 					AudioListener.volume = 0.0f;
-				alpha += alphaIncr;
+				alpha += alphaIncr * Time.deltaTime;
 				if(alpha > 1.0f)
 					alpha = 1.0f;
 				_inUseMaterial.SetFloat("_Alpha",alpha);
@@ -143,11 +143,11 @@ public class CameraSpecialEffect : MonoBehaviour
 			{
 				if(muteSound)					
 				{
-					AudioListener.volume += alphaIncr;
+					AudioListener.volume += alphaIncr * Time.deltaTime;;
 					if(AudioListener.volume > 1.0f)
 						AudioListener.volume = 1.0f;
 				}
-				alpha -= alphaIncr;
+				alpha -= alphaIncr  * Time.deltaTime;
 				if(alpha < 0.0f)
 					alpha = 0.0f;
 				_inUseMaterial.SetFloat("_Alpha",alpha);				
