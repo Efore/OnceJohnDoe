@@ -30,6 +30,8 @@ public class MainMenu : MonoBehaviour
 	[SerializeField]
 	private AudioClip _lightSfx = null;
 
+	private bool _keyPressed = false;
+
 	#endregion
 
 	#region Public members
@@ -54,8 +56,11 @@ public class MainMenu : MonoBehaviour
 
 	private void Update()
 	{
-		if (Input.anyKey)
+		if (Input.anyKey && !_keyPressed)
+		{
+			_keyPressed = true;
 			StartCoroutine (GoToCharSelectionMenu ());
+		}
 	}
 
 	#endregion

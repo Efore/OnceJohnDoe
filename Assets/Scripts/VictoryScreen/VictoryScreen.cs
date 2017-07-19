@@ -30,7 +30,7 @@ public class VictoryScreen : MonoBehaviour
 
 	#region MonoBehaviour calls
 
-	void Awake()
+	void Start()
 	{
 		DialogManager.Singleton.CurrentDialogEndedEvent += delegate(DialogUnit dialog) {
 			if(dialog == _dialogUnit)

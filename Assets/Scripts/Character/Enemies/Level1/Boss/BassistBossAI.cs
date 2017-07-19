@@ -62,6 +62,7 @@ public class BassistBossAI : BossAI
 	private float _initialY;
 	private float _lastRelativeHealth = 1.0f;
 	private float _currentLerping = 0.02f;
+	private float _currentTimeBetweenSpecials;
 
 	private bool _isRolling = false;
 	private bool _isPlaying = false;
@@ -92,6 +93,7 @@ public class BassistBossAI : BossAI
 		base.Awake ();
 		_characterIdentity.CharacterHit.HealthChangeEvent += ChangeMaxTimeBetweenSpecials;
 		DialogManager.Singleton.CurrentDialogEndedEvent += DialogEndedCallback;
+		_currentTimeBetweenSpecials = _maxTimeBetweenSpecials;
 	}
 
 	protected override void Start ()
@@ -104,12 +106,12 @@ public class BassistBossAI : BossAI
 	{
 		if (_isRolling)
 		{
-			_currentLerping += Time.deltaTime * 0.1f;
-			if (_currentLerping >= MAX_LERP_PARAM)
-				_currentLerping = MAX_LERP_PARAM;
-			float lerp = _currentLerping / MAX_LERP_PARAM;
+//			_currentLerping += Time.deltaTime * 0.5f;
+//			if (_currentLerping >= MAX_LERP_PARAM)
+//				_currentLerping = MAX_LERP_PARAM;
+//			float lerp = _currentLerping / MAX_LERP_PARAM;
 
-			TransformRef.position = Vector3.Lerp (TransformRef.position, _posAfterRoll, lerp);
+			TransformRef.position = Vector3.Lerp (TransformRef.position, _posAfterRoll, 0.05f);
 			if (Vector3.Distance (TransformRef.position, _posAfterRoll) < DISTANCE_TO_CHECK_IF_FALLING_DEST)
 			{					
 				_characterIdentity.CharacterAnimation.SetAnimationBool ("Roll", false);
@@ -142,7 +144,7 @@ public class BassistBossAI : BossAI
 	{
 		do
 		{			
-			yield return new WaitForSeconds(Random.Range(_maxTimeBetweenSpecials * 0.5f,_maxTimeBetweenSpecials));
+			yield return new WaitForSeconds(_currentTimeBetweenSpecials);
 			if(CanPerformSpecial())
 			{	
 				int special = Random.Range(1,3);
@@ -170,12 +172,9 @@ public class BassistBossAI : BossAI
 	private void FillOriginsList()
 	{
 		_isPlaying = true;
-
-		if (_lastRelativeHealth > 0.2f)
-		{
-			_shield.gameObject.SetActive (true);
-			_spikesParticle.gameObject.SetActive (true);
-		}
+		_characterIdentity.CharacterHit.IsInvulnerable = true;
+		_shield.gameObject.SetActive (true);
+		_spikesParticle.gameObject.SetActive (true);
 
 		List<Transform> projectileOrigins = _currentSide == Side.LEFT ? _leftSpeakersOrigins : _rightSpeakersOrigins;
 
@@ -225,7 +224,6 @@ public class BassistBossAI : BossAI
 	protected void AnimationStandUpEndsCallbackAI()
 	{
 		_originsToUse.Clear ();
-		StopCoroutine (_behaviourCoroutine);
 		_characterIdentity.CharacterAnimation.SetAnimationBool("Roll",true);
 		_readyToAttack = false;
 		_targetInRangeOfAttack = null;
@@ -282,18 +280,20 @@ public class BassistBossAI : BossAI
 	private void StopPlaying()
 	{
 		_isPlaying = false;
+		_characterIdentity.CharacterHit.IsInvulnerable = false;
 		_shield.gameObject.SetActive (false);
 		_spikesParticle.gameObject.SetActive (false);
 	}
 
 	private void ChangeMaxTimeBetweenSpecials (float relativeHealth)
 	{
+		StopCoroutine (_behaviourCoroutine);
+
 		if (relativeHealth <= 0.0f)
 			PlayVictoryScene ();
 		
 		_lastRelativeHealth = relativeHealth;
-		float max = _maxTimeBetweenSpecials / relativeHealth;
-		_maxTimeBetweenSpecials = max * relativeHealth;
+		_currentTimeBetweenSpecials = Mathf.Max(1.0f, _maxTimeBetweenSpecials * relativeHealth);
 	}
 
 

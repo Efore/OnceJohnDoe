@@ -77,8 +77,8 @@ public class CameraManager : EnhancedMonoBehaviour
 			return;
 		
 		float prevX = TransformRef.position.x;
-		if(_playerToFollow != null)
-			TransformRef.position = _playerToFollow.TransformRef.position + (Vector3.back) * 10;
+		if (_playerToFollow != null)
+			TransformRef.position = new Vector3 (_playerToFollow.TransformRef.position.x, _playerToFollow.TransformRef.position.y, -10.0f);
 		
 		CorrectCameraPosition();
 
