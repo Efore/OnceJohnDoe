@@ -37,7 +37,9 @@ public class EnemyLongRangePlayerDetector : EnhancedMonoBehaviour
 		if (((KnifeCaniAI)_enemyAIController).IsCharging)
 			return;
 
-		if (_enemyAIController.GetTargetInRangeOfAttack() != null)
+		CharacterIdentity detectedEnemy = other.transform.parent.GetComponent<CharacterIdentity> ();
+
+		if (_enemyAIController.Target != detectedEnemy || _enemyAIController.GetTargetInRangeOfAttack() != null)
 			return;
 	
 		if(Mathf.Abs(other.transform.position.x - _enemyIdentity.TransformRef.position.x) < (_boxCollider.bounds.size.x / 2))

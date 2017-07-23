@@ -97,6 +97,9 @@ public class ChoniThreatDetector : EnhancedMonoBehaviour
 
 	private void StartFleeing(Collider other)
 	{
+		if (_enemyIdentity.CharacterMovement.HasToWait)
+			_enemyIdentity.CharacterMovement.HasToWait = false;
+		
 		_enemyIdentity.EnemyPlayerDetectorController.enabled = false;
 		_enemyIdentity.CharacterAttack.StopAttack();
 		_enemyIdentity.CharacterAnimation.SetAnimationInt("ProjectileType",-1);

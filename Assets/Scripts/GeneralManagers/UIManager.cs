@@ -171,7 +171,8 @@ public class UIManager : MonoBehaviour
 		player1Info.gameObject.SetActive (activate);
 		if(player2Info != null)
 			player2Info.gameObject.SetActive (activate);
-		bossInfo.gameObject.SetActive (activate);
+		if(bossInfo != null)
+			bossInfo.gameObject.SetActive (activate);
 	}
 	#endregion
 

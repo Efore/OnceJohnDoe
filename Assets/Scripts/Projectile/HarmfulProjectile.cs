@@ -21,7 +21,7 @@ public class HarmfulProjectile : Projectile
 	#region Private methods
 	protected override void ExecuteAtCollision (Collider other)
 	{
-		CharacterIdentity victim = other.transform.root.GetComponent<CharacterIdentity>();
+		PlayerIdentity victim = other.transform.parent.GetComponent<PlayerIdentity>();
 
 		if(victim == null)
 			return;

@@ -8,8 +8,6 @@ public class EnemyTrafficCollider : EnhancedMonoBehaviour
 	[SerializeField]
 	private CharacterMovement _characterMovement = null;
 
-	private bool _hasToStop = false;
-
 	private const float TIME_FOR_TRAFFIC = 2.0f;
 
 	#endregion
@@ -35,7 +33,7 @@ public class EnemyTrafficCollider : EnhancedMonoBehaviour
 
 	void OnTriggerStay(Collider other)
 	{
-		if (_hasToStop || _characterMovement.IsRunning)
+		if (_characterMovement.HasToWait || _characterMovement.IsRunning)
 			return;
 		
 		if (_characterMovement.gameObject.tag != other.gameObject.tag ||
@@ -52,12 +50,10 @@ public class EnemyTrafficCollider : EnhancedMonoBehaviour
 	#region Private methods
 
 	private IEnumerator StopForAWhile()
-	{
-		_hasToStop = true;
+	{		
 		_characterMovement.HasToWait = true;
 		yield return new WaitForSeconds (TIME_FOR_TRAFFIC);
 		_characterMovement.HasToWait = false;
-		_hasToStop = false;
 	}
 
 	#endregion
