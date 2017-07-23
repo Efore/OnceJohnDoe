@@ -59,7 +59,7 @@ Shader "Custom/WaveAtHitShader"
 			{
 				float2 ps = i.scr_pos.xy *_ScreenParams.xy / i.scr_pos.w;
 
-				uint pp = (uint)ps.x % 3;
+				int pp = (int)ps.x % 3;
 				float4 muls = float4(0, 0, 0, 1);
 
 		        if (pp == 1) { 

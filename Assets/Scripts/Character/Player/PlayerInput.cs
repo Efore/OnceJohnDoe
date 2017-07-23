@@ -32,12 +32,12 @@ public class PlayerInput : CharacterInput
 			return;
 		if (player == Constants.PLAYER_ONE)
 		{
-			KeyUpPressed = Input.GetKey (KeyCode.W);
-			KeyDownPressed = Input.GetKey (KeyCode.S);
-			KeyLeftPressed = Input.GetKey (KeyCode.A);
-			KeyLeftReleased = Input.GetKeyUp (KeyCode.A);
-			KeyRightPressed = Input.GetKey (KeyCode.D);
-			KeyRightReleased = Input.GetKeyUp (KeyCode.D);
+			KeyUpPressed = Input.GetKey (KeyCode.W) || Input.GetKey (KeyCode.UpArrow);
+			KeyDownPressed = Input.GetKey (KeyCode.S) || Input.GetKey (KeyCode.DownArrow);
+			KeyLeftPressed = Input.GetKey (KeyCode.A) || Input.GetKey (KeyCode.LeftArrow);
+			KeyLeftReleased = Input.GetKeyUp (KeyCode.A) || Input.GetKeyUp (KeyCode.LeftArrow);
+			KeyRightPressed = Input.GetKey (KeyCode.D) || Input.GetKey (KeyCode.RightArrow);
+			KeyRightReleased = Input.GetKeyUp (KeyCode.D) || Input.GetKeyUp (KeyCode.RightArrow);
 			KeyAttackPressed = Input.GetKeyDown (KeyCode.G);
 			KeySpecialPressed1 = Input.GetKeyDown (KeyCode.H);
 			KeySpecialPressed2 = Input.GetKeyDown (KeyCode.J);

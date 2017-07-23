@@ -75,7 +75,7 @@ public class DialogManager : MonoBehaviour
 	{
 		if (_currentDialog != null && !_skipingText)
 		{
-			if (Input.GetKeyDown (KeyCode.Space))
+			if (Input.GetKeyDown (KeyCode.Space) || Input.GetKeyDown(KeyCode.G) || Input.GetKeyDown(KeyCode.H) || Input.GetKeyDown(KeyCode.J) ||Input.GetKeyDown(KeyCode.Return))
 				_skipingText = true;
 		}
 	}

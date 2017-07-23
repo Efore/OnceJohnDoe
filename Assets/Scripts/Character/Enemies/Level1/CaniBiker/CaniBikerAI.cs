@@ -16,6 +16,7 @@ public class CaniBikerAI : EnemyAI
 	private Vector3 _posStopFalling = Vector3.zero;
 
 	private CameraBorder _lastCameraBorder = null;
+	private AudioSource _audioSource = null;
 
 	#endregion
 
@@ -37,7 +38,8 @@ public class CaniBikerAI : EnemyAI
 	{
 		base.Start ();
 		_characterIdentity.CharacterHit.CharacterGetsHitEvent += StartFalling;
-		TransformRef.position = new Vector3 (TransformRef.position.x, Target.TransformRef.position.y, TransformRef.position.z);
+		//TransformRef.position = new Vector3 (TransformRef.position.x, Target.TransformRef.position.y, TransformRef.position.z);
+		_audioSource = GetComponent<AudioSource> ();
 		StartCoroutine(ChooseTarget (false));
 	}
 
@@ -84,8 +86,8 @@ public class CaniBikerAI : EnemyAI
 			_chargingDirection = Constants.Vector2.right;
 
 
-		TransformRef.position = new Vector3 (TransformRef.position.x + _chargingDirection.x * 3, Target.TransformRef.position.y, TransformRef.position.z);
-
+		TransformRef.position = new Vector3 (TransformRef.position.x + (!wait ? 0 : _chargingDirection.x * 3), Target.TransformRef.position.y, TransformRef.position.z);
+		_audioSource.Play ();
 	}
 
 	private void StartFalling(CharacterIdentity attacker, int hitNum)

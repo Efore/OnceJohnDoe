@@ -65,9 +65,9 @@ public class CharacterSelectionManager : MonoBehaviour
 	{
 		if (_currentPlayerSelecting == Constants.PLAYER_ONE && !_charSelected)
 		{
-			if (Input.GetKeyDown (KeyCode.A))
+			if (Input.GetKeyDown (KeyCode.A) || Input.GetKeyDown (KeyCode.LeftArrow))
 				PreviousCharacter ();
-			if (Input.GetKeyDown (KeyCode.D))
+			if (Input.GetKeyDown (KeyCode.D) || Input.GetKeyDown (KeyCode.RightArrow))
 				NextCharacter ();
 			if(Input.GetKeyDown(KeyCode.G) || Input.GetKeyDown(KeyCode.H) || Input.GetKeyDown(KeyCode.J) ||Input.GetKeyDown(KeyCode.Return) )
 				SelectCharacter ();

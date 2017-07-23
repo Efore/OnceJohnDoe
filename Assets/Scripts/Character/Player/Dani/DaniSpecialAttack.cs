@@ -161,7 +161,8 @@ public class DaniSpecialAttack : PlayerSpecialAttack
 		for (int i = 0; i < _tamedEnemies.Count; ++i)
 			CharacterManager.Singleton.Enemies.Remove (_tamedEnemies [i].EnemyIdentity);
 
-		_currentTamingDuration -= 0.01f;
+		if(_tamedEnemies.Count > 0)
+			_currentTamingDuration -= 0.01f;
 	}
 
 	private void CommandTamedEnemies()

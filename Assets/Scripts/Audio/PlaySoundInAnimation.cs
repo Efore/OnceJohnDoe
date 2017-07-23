@@ -26,7 +26,8 @@ public class PlaySoundInAnimation : MonoBehaviour
 
 	void Awake()
 	{
-		_audioSource = GetComponent<AudioSource> ();
+		if(_audioSource == null)
+			_audioSource = GetComponent<AudioSource> ();
 	}	
 
 	#endregion
@@ -39,7 +40,7 @@ public class PlaySoundInAnimation : MonoBehaviour
 
 	public void PlaySound(AudioClip audioClip)
 	{
-		_audioSource.PlayOneShot (audioClip);
+		_audioSource.PlayOneShot (audioClip);	
 	}
 
 	#endregion
