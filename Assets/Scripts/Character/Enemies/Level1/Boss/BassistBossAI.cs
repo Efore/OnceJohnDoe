@@ -116,7 +116,6 @@ public class BassistBossAI : BossAI
 			{					
 				_characterIdentity.CharacterAnimation.SetAnimationBool ("Roll", false);
 				_isRolling = false;
-				_behaviourCoroutine = StartCoroutine (BassistBehaviorCoroutine());
 				_currentLerping = 0.0f;
 			}
 		}
@@ -141,10 +140,10 @@ public class BassistBossAI : BossAI
 	#region Private methods
 
 	private IEnumerator BassistBehaviorCoroutine()
-	{
+	{		
+		yield return new WaitForSeconds(0.1f);
 		do
 		{			
-			yield return new WaitForSeconds(_currentTimeBetweenSpecials);
 			if(CanPerformSpecial())
 			{	
 				int special = Random.Range(1,3);
@@ -152,6 +151,7 @@ public class BassistBossAI : BossAI
 				_characterIdentity.CharacterAnimation.SetAnimationTrigger("SpecialAttack" + special);
 				FillOriginsList();
 			}		
+			yield return new WaitForSeconds(_currentTimeBetweenSpecials);
 		} while(true);
 	}
 
@@ -172,7 +172,6 @@ public class BassistBossAI : BossAI
 	private void FillOriginsList()
 	{
 		_isPlaying = true;
-		_characterIdentity.CharacterHit.IsInvulnerable = true;
 		_shield.gameObject.SetActive (true);
 		_spikesParticle.gameObject.SetActive (true);
 
@@ -219,6 +218,7 @@ public class BassistBossAI : BossAI
 			_currentSide = Side.RIGHT;
 			_characterIdentity.CharacterMovement.HeadingDirection = Constants.Vector2.left;
 		}
+		_behaviourCoroutine = StartCoroutine (BassistBehaviorCoroutine());
 	}
 
 	protected void AnimationStandUpEndsCallbackAI()
@@ -227,6 +227,7 @@ public class BassistBossAI : BossAI
 		_characterIdentity.CharacterAnimation.SetAnimationBool("Roll",true);
 		_readyToAttack = false;
 		_targetInRangeOfAttack = null;
+		_characterIdentity.CharacterHit.IsInvulnerable = true;
 		float nextLimitXpos;
 		_isRolling = true;
 		if (_currentSide == Side.RIGHT)
