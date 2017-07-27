@@ -1,4 +1,4 @@
-![ScreenShot](/ImgsForReadme/ODJLogo.jpg)
+![ScreenShot](/ImgsForReadme/Icono.png)
 
 # OnceJohnDoe
 Small indie game
