@@ -294,10 +294,10 @@ public class BassistBossAI : BossAI
 			PlayVictoryScene ();
 		
 		_lastRelativeHealth = relativeHealth;
-		_currentTimeBetweenSpecials = Mathf.Max(1.0f, _maxTimeBetweenSpecials * relativeHealth);
+		_currentTimeBetweenSpecials = Mathf.Max(2.0f, _maxTimeBetweenSpecials * relativeHealth);
 	}
 
-
+	 
 	private void CreateSpeakers()
 	{
 		_rightSpeakers = GameObject.Instantiate (_speakersPrefab, _rightSpeakersPosition.position, Quaternion.identity) as GameObject;
