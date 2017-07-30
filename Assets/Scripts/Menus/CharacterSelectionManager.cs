@@ -29,7 +29,7 @@ public class CharacterSelectionManager : MonoBehaviour
 	private int _currentSelectedCharacterIndex = 0;
 	private int _currentPlayerSelecting = 0;
 
-	private bool _charSelected = false;
+	private bool _charSelected = true;
 	#endregion
 
 	#region Public members
@@ -58,7 +58,10 @@ public class CharacterSelectionManager : MonoBehaviour
 	void Start()
 	{
 		CameraSpecialEffect fadeInEffect = Camera.main.GetComponent<CameraSpecialEffect> ();
-		fadeInEffect.SpecialEffectFadeScreen (false,1.0f);
+		fadeInEffect.FadeFinishedEvent += delegate {
+			_charSelected = false;	
+		};
+		fadeInEffect.SpecialEffectFadeScreen (false,0.5f);
 	}
 
 	void Update()
@@ -103,7 +106,7 @@ public class CharacterSelectionManager : MonoBehaviour
 
 	private void SelectCharacter()
 	{
-		if (_currentSelectedCharacter.inGamePrefab != null)
+		if (_currentSelectedCharacter.inGamePrefab != null) 
 		{
 			_charSelected = true;
 			GameManager.Singleton.player1CharacterPrefab = _currentSelectedCharacter.inGamePrefab;
@@ -112,7 +115,7 @@ public class CharacterSelectionManager : MonoBehaviour
 				GameManager.Singleton.LoadScene (GameManager.SceneIndexes.Level1);	
 			};
 			_audioSource.PlayOneShot (_selectCharacterSound);
-			fadeInEffect.SpecialEffectFadeScreen (true, 0.75f);
+			fadeInEffect.SpecialEffectFadeScreen (true, 1.0f);
 		}
 	}
 
