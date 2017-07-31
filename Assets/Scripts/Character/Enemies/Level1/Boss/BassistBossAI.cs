@@ -60,8 +60,6 @@ public class BassistBossAI : BossAI
 	private Vector3 _posAfterRoll = Constants.Vector3.zero;
 
 	private float _initialY;
-	private float _lastRelativeHealth = 1.0f;
-	private float _currentLerping = 0.02f;
 	private float _currentTimeBetweenSpecials;
 
 	private bool _isRolling = false;
@@ -116,7 +114,6 @@ public class BassistBossAI : BossAI
 			{					
 				_characterIdentity.CharacterAnimation.SetAnimationBool ("Roll", false);
 				_isRolling = false;
-				_currentLerping = 0.0f;
 			}
 		}
 		else if(_targetInRangeOfAttack != null)
@@ -293,7 +290,6 @@ public class BassistBossAI : BossAI
 		if (relativeHealth <= 0.0f)
 			PlayVictoryScene ();
 		
-		_lastRelativeHealth = relativeHealth;
 		_currentTimeBetweenSpecials = Mathf.Max(2.0f, _maxTimeBetweenSpecials * relativeHealth);
 	}
 

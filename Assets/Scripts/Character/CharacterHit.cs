@@ -11,8 +11,6 @@ public class CharacterHit : CharacterComponent {
 	[SerializeField]
 	private Transform _fxHitParticlePosition = null;
 
-	private AudioSource _audioSource = null;
-
 	private Material _spriteMaterial = null;
 
 	private const float MIN_FALLING_DISTANCE = 1.0f;
@@ -73,7 +71,6 @@ public class CharacterHit : CharacterComponent {
 	protected override void Awake ()
 	{
 		base.Awake ();
-		_audioSource = GetComponent<AudioSource> ();
 		_spriteMaterial = GetComponent<SpriteRenderer> ().material;
 	}
 

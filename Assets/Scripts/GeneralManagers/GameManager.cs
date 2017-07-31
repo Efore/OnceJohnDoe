@@ -35,8 +35,6 @@ public class GameManager : MonoBehaviour
 
 	private AsyncOperation _asyncOp = null;
 
-	private List<string> _scenesPreloaded =  new List<string>();
-
 	#endregion
 
 	#region Public members
@@ -74,6 +72,7 @@ public class GameManager : MonoBehaviour
 		_instance = this;
 		DontDestroyOnLoad (this.gameObject);
 		ResetGame ();
+		Cursor.visible = false; 
 	}
 
 	#endregion
