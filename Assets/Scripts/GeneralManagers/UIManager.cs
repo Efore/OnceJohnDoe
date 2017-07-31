@@ -68,7 +68,8 @@ public class UIManager : MonoBehaviour
 
 	void Update()
 	{
-		if(Input.GetKeyDown(KeyCode.Escape))
+		if(Input.GetKeyDown(KeyCode.Escape) && !CharacterManager.Singleton.GetPlayer (Constants.PLAYER_ONE).CharacterInput.LockInput ||
+			Input.GetKeyDown(KeyCode.Escape) && _gamePaused)
 			PauseGame ();		
 
 		if(_gamePaused)
