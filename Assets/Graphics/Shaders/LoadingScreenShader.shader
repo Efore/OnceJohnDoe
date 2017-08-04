@@ -81,8 +81,9 @@
 			{
 				fixed4 col = 0;
 				float2 temp = i.uv;
-				if (_ProjectionParams.x > 0)
-					temp.y = 1 - temp.y; 
+				#if UNITY_UV_STARTS_AT_TOP
+				temp.y = 1 - temp.y; 
+				#endif
 				col = tex2D (_BlendingTex, temp);	
 					
 				col.a = _Alpha;
