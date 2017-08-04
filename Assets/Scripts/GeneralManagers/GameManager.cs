@@ -72,7 +72,9 @@ public class GameManager : MonoBehaviour
 		_instance = this;
 		DontDestroyOnLoad (this.gameObject);
 		ResetGame ();
+		#if !UNITY_EDITOR
 		Cursor.visible = false; 
+		#endif
 	}
 
 	#endregion

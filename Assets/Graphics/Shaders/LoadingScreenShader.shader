@@ -80,11 +80,11 @@
 			fixed4 frag (v2f i) : SV_Target
 			{
 				fixed4 col = 0;
-
 				float2 temp = i.uv;
-				temp.y = 1 - temp.y;
+				if (_ProjectionParams.x > 0)
+					temp.y = 1 - temp.y; 
 				col = tex2D (_BlendingTex, temp);	
-						
+					
 				col.a = _Alpha;
 				return col * ctrParam(i);
 			}
