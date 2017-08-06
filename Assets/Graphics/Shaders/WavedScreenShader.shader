@@ -97,7 +97,7 @@
 
 				offset -= 0.5;
 				float texOffset = offset/_DistortionDamper;
-				float waveIntensity = (abs(IN.worldPos.x - _XPosOrigin)/(1 - _XPosOrigin));
+				float waveIntensity = (abs(IN.worldPos.x - _XPosOrigin));
 
 				texOffset = texOffset * waveIntensity;
 				_WaveColor = _WaveColor * waveIntensity;
