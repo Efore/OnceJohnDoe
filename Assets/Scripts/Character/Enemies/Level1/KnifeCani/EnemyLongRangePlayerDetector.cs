@@ -55,7 +55,7 @@ public class EnemyLongRangePlayerDetector : EnhancedMonoBehaviour
 	{
 		float limitX = _enemyIdentity.CharacterMovement.HeadingDirection ==Constants.Vector2.right ? _boxCollider.bounds.size.x : -_boxCollider.bounds.size.x;
 		limitX += _enemyIdentity.TransformRef.position.x;
-
+		((KnifeCaniAI)_enemyAIController).VoiceAudioSource.PlayOneShot (((KnifeCaniAI)_enemyAIController).ChargeVoice);
 		((KnifeCaniAI)_enemyAIController).XCoordLimit = limitX;
 		((KnifeCaniAI)_enemyAIController).IsCharging = true;
 

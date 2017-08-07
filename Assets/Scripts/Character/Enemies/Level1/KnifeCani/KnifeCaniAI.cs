@@ -29,7 +29,6 @@ public class KnifeCaniAI : CaniAI
 			if (_isCharging) 
 			{
 				_characterIdentity.CharacterMovement.HasToWait = false;
-				_voiceAudioSource.PlayOneShot (_chargeVoice);
 			}
 			_characterIdentity.CharacterMovement.IsRunning = value;
 			_chargingAttackCollider.SetActive (value);
@@ -46,6 +45,16 @@ public class KnifeCaniAI : CaniAI
 	{
 		get;
 		set;
+	}
+
+	public AudioSource VoiceAudioSource
+	{
+		get { return _voiceAudioSource; }
+	}
+
+	public AudioClip ChargeVoice
+	{
+		get { return _chargeVoice; }
 	}
 
 	#endregion
