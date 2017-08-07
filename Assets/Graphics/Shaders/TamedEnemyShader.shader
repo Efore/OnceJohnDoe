@@ -94,8 +94,9 @@
 				float2 offset = float2( tex2D(_NoiseTex, float2(IN.worldPos.y / _DistortionSpreader + _Time[1], 0)).g, 0);
 
 				offset -= 0.5;
-
-				fixed4 c = SampleSpriteTexture (IN.texcoord + offset/_DistortionDamper) * IN.color;
+				float2 newUV = IN.texcoord + offset/_DistortionDamper;
+				newUV.y = IN.texcoord.y;
+				fixed4 c = SampleSpriteTexture (newUV) * IN.color;
 				c.rgb *= c.a;
 
 
