@@ -7,6 +7,12 @@ public class KnifeCaniAI : CaniAI
 	[SerializeField]
 	protected GameObject _chargingAttackCollider;
 
+	[Header("Audio data")]
+	[SerializeField]
+	protected AudioSource _voiceAudioSource = null;
+	[SerializeField]
+	protected AudioClip _chargeVoice = null;
+
 	private bool _isCharging = false;
 
 	#endregion
@@ -20,8 +26,11 @@ public class KnifeCaniAI : CaniAI
 		get { return _isCharging; }
 		set {
 			_isCharging = value;
-			if(_isCharging)
+			if (_isCharging) 
+			{
 				_characterIdentity.CharacterMovement.HasToWait = false;
+				_voiceAudioSource.PlayOneShot (_chargeVoice);
+			}
 			_characterIdentity.CharacterMovement.IsRunning = value;
 			_chargingAttackCollider.SetActive (value);
 		}
